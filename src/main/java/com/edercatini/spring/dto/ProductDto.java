@@ -3,6 +3,7 @@ package com.edercatini.spring.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Currency;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto implements Serializable {
+public class ProductDto implements Serializable {
 
     private static final long serialVersionUID = -6885090840185178628L;
 
@@ -20,4 +21,7 @@ public class CategoryDto implements Serializable {
     @NotEmpty
     @Size(min = 4, max = 60, message = "Nome deve conter entre {min} e {max} caracteres")
     private String name;
+
+    @NotNull
+    private Double price;
 }

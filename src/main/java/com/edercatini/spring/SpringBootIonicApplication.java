@@ -9,5 +9,4 @@ public class SpringBootIonicApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootIonicApplication.class, args);
 	}
-
 }

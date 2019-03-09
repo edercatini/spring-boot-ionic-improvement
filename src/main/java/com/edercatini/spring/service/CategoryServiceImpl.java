@@ -24,8 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findById(Long id) {
-        Optional<Category> category = repository.findById(id);
-        return category.orElseThrow(() -> new ObjectNotFoundException("Category not found"));
+        Optional<Category> object = repository.findById(id);
+        return object.orElseThrow(() -> new ObjectNotFoundException("Category not found"));
     }
 
     @Override
@@ -34,16 +34,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> save(CategoryDto categoryDto) {
-        Category category = new Category(categoryDto.getName());
-        return repository.saveAll(asList(category));
+    public List<Category> save(CategoryDto dto) {
+        Category object = new Category(dto.getName());
+        return repository.saveAll(asList(object));
     }
 
     @Override
-    public void update(Long id, CategoryDto categoryDto) {
-        Category category = this.findById(id);
-        category.setName(categoryDto.getName());
-        repository.saveAll(asList(category));
+    public void update(Long id, CategoryDto dto) {
+        Category object = this.findById(id);
+        object.setName(dto.getName());
+        repository.saveAll(asList(object));
     }
 
     @Override

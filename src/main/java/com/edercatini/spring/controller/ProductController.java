@@ -1,8 +1,8 @@
 package com.edercatini.spring.controller;
 
-import com.edercatini.spring.domain.Category;
-import com.edercatini.spring.dto.CategoryDto;
-import com.edercatini.spring.service.CategoryService;
+import com.edercatini.spring.domain.Product;
+import com.edercatini.spring.dto.ProductDto;
+import com.edercatini.spring.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,32 +15,32 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/product")
 @CrossOrigin(origins = "*")
-public class CategoryController {
+public class ProductController {
 
-    private CategoryService service;
+    private ProductService service;
 
     @Autowired
-    public CategoryController(CategoryService service) {
+    public ProductController(ProductService service) {
         this.service = service;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> findById(@PathVariable Long id) {
-        Category object = service.findById(id);
+    public ResponseEntity<Product> findById(@PathVariable Long id) {
+        Product object = service.findById(id);
         return ok().body(object);
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
-        List<Category> objects = service.findAll();
+    public ResponseEntity<List<Product>> findAll() {
+        List<Product> objects = service.findAll();
         return ok().body(objects);
     }
 
     @PostMapping
-    public ResponseEntity<Category> save(@Valid @RequestBody CategoryDto dto) {
-        List<Category> object = service.save(dto);
+    public ResponseEntity<Product> save(@Valid @RequestBody ProductDto dto) {
+        List<Product> object = service.save(dto);
 
         if (object != null) {
             URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(object.get(0).getId()).toUri();
@@ -51,7 +51,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody CategoryDto dto) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody ProductDto dto) {
         service.update(id, dto);
         return noContent().build();
     }
