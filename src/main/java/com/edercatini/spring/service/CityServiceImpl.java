@@ -1,9 +1,9 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.State;
-import com.edercatini.spring.dto.StateDto;
+import com.edercatini.spring.domain.City;
+import com.edercatini.spring.dto.CityDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
-import com.edercatini.spring.repository.StateRepository;
+import com.edercatini.spring.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,35 +13,35 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 
 @Service
-public class StateServiceImpl implements StateService {
+public class CityServiceImpl implements CityService {
 
-    private StateRepository repository;
+    private CityRepository repository;
 
     @Autowired
-    public StateServiceImpl(StateRepository repository) {
+    public CityServiceImpl(CityRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public State findById(Long id) {
-        Optional<State> object = repository.findById(id);
+    public City findById(Long id) {
+        Optional<City> object = repository.findById(id);
         return object.orElseThrow(() -> new ObjectNotFoundException("Category not found"));
     }
 
     @Override
-    public List<State> findAll() {
+    public List<City> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public List<State> save(StateDto dto) {
-        State object = new State(dto.getName());
+    public List<City> save(CityDto dto) {
+        City object = new City(dto.getName());
         return repository.saveAll(asList(object));
     }
 
     @Override
-    public void update(Long id, StateDto dto) {
-        State object = this.findById(id);
+    public void update(Long id, CityDto dto) {
+        City object = this.findById(id);
         object.setName(dto.getName());
         repository.saveAll(asList(object));
     }

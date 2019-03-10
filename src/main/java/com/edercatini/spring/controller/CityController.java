@@ -1,8 +1,8 @@
 package com.edercatini.spring.controller;
 
-import com.edercatini.spring.domain.State;
-import com.edercatini.spring.dto.StateDto;
-import com.edercatini.spring.service.StateService;
+import com.edercatini.spring.domain.City;
+import com.edercatini.spring.dto.CityDto;
+import com.edercatini.spring.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,32 +15,32 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
-@RequestMapping("/api/state")
+@RequestMapping("/api/city")
 @CrossOrigin(origins = "*")
-public class StateController {
+public class CityController {
 
-    private StateService service;
+    private CityService service;
 
     @Autowired
-    public StateController(StateService service) {
+    public CityController(CityService service) {
         this.service = service;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<State> findById(@PathVariable Long id) {
-        State object = service.findById(id);
+    public ResponseEntity<City> findById(@PathVariable Long id) {
+        City object = service.findById(id);
         return ok().body(object);
     }
 
     @GetMapping
-    public ResponseEntity<List<State>> findAll() {
-        List<State> objects = service.findAll();
+    public ResponseEntity<List<City>> findAll() {
+        List<City> objects = service.findAll();
         return ok().body(objects);
     }
 
     @PostMapping
-    public ResponseEntity<State> save(@Valid @RequestBody StateDto dto) {
-        List<State> object = service.save(dto);
+    public ResponseEntity<City> save(@Valid @RequestBody CityDto dto) {
+        List<City> object = service.save(dto);
 
         if (object != null) {
             URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(object.get(0).getId()).toUri();
@@ -51,7 +51,7 @@ public class StateController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody StateDto dto) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody CityDto dto) {
         service.update(id, dto);
         return noContent().build();
     }

@@ -1,9 +1,9 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.State;
-import com.edercatini.spring.dto.StateDto;
+import com.edercatini.spring.domain.City;
+import com.edercatini.spring.dto.CityDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
-import com.edercatini.spring.repository.StateRepository;
+import com.edercatini.spring.repository.CityRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,60 +29,60 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class StateServiceImplTest {
+public class CityServiceImplTest {
 
-    private static final String OBJECT_NAME = "State";
+    private static final String OBJECT_NAME = "City";
     private static final Long PARAM_ID = 1L;
     private static final Integer NO_ELEMENTS = 0;
 
     @MockBean
-    private StateRepository repository;
+    private CityRepository repository;
 
     @Autowired
-    private StateService service;
+    private CityService service;
 
     @Test
     public void mustFindById() {
-        given(repository.findById(anyLong())).willReturn(of(new State(OBJECT_NAME)));
-        State object = service.findById(PARAM_ID);
+        given(repository.findById(anyLong())).willReturn(of(new City(OBJECT_NAME)));
+        City object = service.findById(PARAM_ID);
         assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotFindById() {
         doReturn(empty()).when(repository).findById(anyLong());
-        State object = service.findById(PARAM_ID);
+        City object = service.findById(PARAM_ID);
     }
 
     @Test
     public void mustFindAllObjects() {
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(new State(OBJECT_NAME))));
-        List<State> categories = service.findAll();
+        given(repository.findAll()).willReturn(new ArrayList<>(asList(new City(OBJECT_NAME))));
+        List<City> categories = service.findAll();
         assertThat(categories.get(0).getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test
     public void mustNotFindAnyObject() {
         given(repository.findAll()).willReturn(new ArrayList<>());
-        List<State> categories = service.findAll();
+        List<City> categories = service.findAll();
         assertThat(categories.size(), is(equalTo(NO_ELEMENTS)));
     }
 
     @Test
     public void mustSaveAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new State(OBJECT_NAME))));
-        StateDto dto = new StateDto(OBJECT_NAME);
-        List<State> object = service.save(dto);
-        assertTrue(object.get(0) instanceof State);
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new City(OBJECT_NAME))));
+        CityDto dto = new CityDto(OBJECT_NAME);
+        List<City> object = service.save(dto);
+        assertTrue(object.get(0) instanceof City);
         assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test
     public void mustUpdateAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new State(OBJECT_NAME))));
-        given(repository.findById(anyLong())).willReturn(Optional.of(new State()));
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new City(OBJECT_NAME))));
+        given(repository.findById(anyLong())).willReturn(Optional.of(new City()));
 
-        service.update(PARAM_ID, new StateDto(OBJECT_NAME));
+        service.update(PARAM_ID, new CityDto(OBJECT_NAME));
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
@@ -91,12 +91,12 @@ public class StateServiceImplTest {
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotUpdateAnObjectDueToInvalidId() {
         given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, new StateDto(OBJECT_NAME));
+        service.update(PARAM_ID, new CityDto(OBJECT_NAME));
     }
 
     @Test
     public void mustDeleteAnObject() {
-        given(repository.findById(anyLong())).willReturn(Optional.of(new State(OBJECT_NAME)));
+        given(repository.findById(anyLong())).willReturn(Optional.of(new City(OBJECT_NAME)));
         doNothing().when(repository).deleteById(anyLong());
         service.delete(PARAM_ID);
 

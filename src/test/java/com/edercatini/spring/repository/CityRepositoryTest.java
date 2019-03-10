@@ -1,6 +1,6 @@
 package com.edercatini.spring.repository;
 
-import com.edercatini.spring.domain.Category;
+import com.edercatini.spring.domain.City;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,17 +20,17 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CategoryRepositoryTest {
+public class CityRepositoryTest {
 
-    private static final String OBJECT_NAME = "Category";
+    private static final String OBJECT_NAME = "City";
     private static final Long INVALID_PARAM_ID = 9999999999999L;
 
     @Autowired
-    private CategoryRepository repository;
+    private CityRepository repository;
 
     @Before
     public void setUp() {
-        Category object = new Category(OBJECT_NAME);
+        City object = new City(OBJECT_NAME);
         repository.saveAll(asList(object));
     }
 
@@ -41,41 +41,41 @@ public class CategoryRepositoryTest {
 
     @Test
     public void mustFindById() {
-        List<Category> objects = repository.findAll();
-        Optional<Category> object = repository.findById(objects.get(0).getId());
+        List<City> objects = repository.findAll();
+        Optional<City> object = repository.findById(objects.get(0).getId());
         assertThat(object.get().getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test
     public void mustNotFindById() {
-        Optional<Category> object = repository.findById(INVALID_PARAM_ID);
+        Optional<City> object = repository.findById(INVALID_PARAM_ID);
         assertTrue(object.isEmpty());
     }
 
     @Test
     public void mustFindAllItems() {
-        List<Category> objects = repository.findAll();
+        List<City> objects = repository.findAll();
         assertThat(objects.get(0).getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test
     public void mustNotFindAnyItems() {
         this.tearDown();
-        List<Category> objects = repository.findAll();
+        List<City> objects = repository.findAll();
         assertThat(objects.size(), is(equalTo(0)));
     }
 
     @Test
     public void mustSaveAnItem() {
-        Category object = new Category(OBJECT_NAME);
-        Category savedObject = repository.save(object);
+        City object = new City(OBJECT_NAME);
+        City savedObject = repository.save(object);
         assertThat(savedObject.getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test
     public void mustRemoveAllItems() {
         repository.deleteAll();
-        List<Category> objects = repository.findAll();
+        List<City> objects = repository.findAll();
         assertThat(objects.size(), is(equalTo(0)));
     }
 }

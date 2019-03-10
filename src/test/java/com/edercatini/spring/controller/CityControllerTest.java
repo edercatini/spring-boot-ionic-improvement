@@ -1,7 +1,7 @@
 package com.edercatini.spring.controller;
 
-import com.edercatini.spring.domain.Product;
-import com.edercatini.spring.service.ProductService;
+import com.edercatini.spring.domain.City;
+import com.edercatini.spring.service.CityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,11 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProductControllerTest {
+public class CityControllerTest {
 
-    private static final String ENTITY = "product";
+    private static final String ENTITY = "city";
     private static final String OBJECT_NAME = "Test";
-    private static final Double OBJECT_PRICE = 1000d;
     private static final String API_BASE_URL = "/api/" + ENTITY;
     private static final String INVALID_ENDPOINT = "/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
@@ -42,11 +41,11 @@ public class ProductControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private ProductService service;
+    private CityService service;
 
     @Test
     public void mustFindById() throws Exception {
-        given(service.findById(anyLong())).willReturn(new Product(OBJECT_NAME, OBJECT_PRICE));
+        given(service.findById(anyLong())).willReturn(new City(OBJECT_NAME));
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(MediaType.APPLICATION_JSON))
@@ -56,16 +55,14 @@ public class ProductControllerTest {
 
     @Test
     public void mustFindAll() throws Exception {
-        List<Product> objects = new ArrayList<>(asList(new Product(OBJECT_NAME, OBJECT_PRICE), new Product(OBJECT_NAME, OBJECT_PRICE)));
+        List<City> objects = new ArrayList<>(asList(new City(OBJECT_NAME), new City(OBJECT_NAME)));
         given(service.findAll()).willReturn(new ArrayList<>(objects));
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].name").value(OBJECT_NAME))
-            .andExpect(jsonPath("$[0].price").value(OBJECT_PRICE))
-            .andExpect(jsonPath("$[1].name").value(OBJECT_NAME))
-            .andExpect(jsonPath("$[1].price").value(OBJECT_PRICE));
+            .andExpect(jsonPath("$[1].name").value(OBJECT_NAME));
     }
 
     @Test
@@ -77,7 +74,7 @@ public class ProductControllerTest {
 
     @Test
     public void mustSaveAnObject() throws Exception {
-        Product object = new Product(OBJECT_NAME, OBJECT_PRICE);
+        City object = new City(OBJECT_NAME);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
@@ -104,7 +101,7 @@ public class ProductControllerTest {
 
     @Test
     public void mustUpdateAnObject() throws Exception {
-        Product object = new Product(OBJECT_NAME, OBJECT_PRICE);
+        City object = new City(OBJECT_NAME);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         doNothing().when(service).update(anyLong(), any());

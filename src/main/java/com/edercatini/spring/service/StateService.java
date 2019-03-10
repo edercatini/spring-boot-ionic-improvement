@@ -1,8 +1,6 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Category;
 import com.edercatini.spring.domain.State;
-import com.edercatini.spring.dto.CategoryDto;
 import com.edercatini.spring.dto.StateDto;
 
 import java.util.List;
