@@ -34,11 +34,11 @@ public class ProductControllerTest {
     private static final String ENTITY = "product";
     private static final String OBJECT_NAME = "Test";
     private static final Double OBJECT_PRICE = 1000d;
-    private static final String API_BASE_URL = "/api/" + ENTITY;
-    private static final String INVALID_ENDPOINT = "/" + ENTITY;
+    private static final String API_BASE_URL = "/" + ENTITY;
+    private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
     private static final String INVALID_REQUEST_BODY = "invalid";
-    private static final String API_PAGE_URL = "/api/" + ENTITY + "/page";
+    private static final String API_PAGE_URL = "/" + ENTITY + "/page";
     private static final Integer TOTAL_PAGES = 1;
     private static final Integer TOTAL_ELEMENTS = 2;
 

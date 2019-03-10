@@ -3,6 +3,7 @@ package com.edercatini.spring.controller;
 import com.edercatini.spring.domain.State;
 import com.edercatini.spring.dto.StateDto;
 import com.edercatini.spring.service.StateService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
-@RequestMapping("/api/state")
+@RequestMapping("/state")
 @CrossOrigin(origins = "*")
 public class StateController {
 
@@ -27,18 +28,21 @@ public class StateController {
         this.service = service;
     }
 
+    @ApiOperation(value = "Searches for a specific State by its ID")
     @GetMapping("/{id}")
     public ResponseEntity<State> findById(@PathVariable Long id) {
         State object = service.findById(id);
         return ok().body(object);
     }
 
+    @ApiOperation(value = "Returns a complete set of States")
     @GetMapping
     public ResponseEntity<List<State>> findAll() {
         List<State> objects = service.findAll();
         return ok().body(objects);
     }
 
+    @ApiOperation(value = "Returns a complete set of States with paginated data")
     @GetMapping(value = "/page")
     public ResponseEntity<Page<StateDto>> findByPage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -49,6 +53,7 @@ public class StateController {
         return ok().body(list);
     }
 
+    @ApiOperation(value = "Persist a State Entity")
     @PostMapping
     public ResponseEntity<State> save(@Valid @RequestBody StateDto dto) {
         List<State> object = service.save(dto);
@@ -61,12 +66,14 @@ public class StateController {
         }
     }
 
+    @ApiOperation(value = "Updates an existing State Entity")
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody StateDto dto) {
         service.update(id, dto);
         return noContent().build();
     }
 
+    @ApiOperation(value = "Deletes a specific State Entity")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

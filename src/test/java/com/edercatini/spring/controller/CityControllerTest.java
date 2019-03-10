@@ -33,11 +33,11 @@ public class CityControllerTest {
 
     private static final String ENTITY = "city";
     private static final String OBJECT_NAME = "Test";
-    private static final String API_BASE_URL = "/api/" + ENTITY;
-    private static final String INVALID_ENDPOINT = "/" + ENTITY;
+    private static final String API_BASE_URL = "/" + ENTITY;
+    private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
     private static final String INVALID_REQUEST_BODY = "invalid";
-    private static final String API_PAGE_URL = "/api/" + ENTITY + "/page";
+    private static final String API_PAGE_URL = "/" + ENTITY + "/page";
     private static final Integer TOTAL_PAGES = 1;
     private static final Integer TOTAL_ELEMENTS = 2;
 
