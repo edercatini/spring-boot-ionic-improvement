@@ -6,9 +6,14 @@ import com.edercatini.spring.exception.ObjectNotFoundException;
 import com.edercatini.spring.repository.CategoryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -34,6 +39,12 @@ public class CategoryServiceImplTest {
     private static final String OBJECT_NAME = "Category";
     private static final Long PARAM_ID = 1L;
     private static final Integer NO_ELEMENTS = 0;
+    private static final Integer PAGE = 0;
+    private static final Integer SIZE = 24;
+    private static final String DIRECTION = "ASC";
+    private static final String PROPERTIES = "NAME";
+    private static final Integer TOTAL_PAGES = 1;
+    private static final Long TOTAL_ELEMENTS = 2L;
 
     @MockBean
     private CategoryRepository repository;
@@ -64,8 +75,18 @@ public class CategoryServiceImplTest {
     @Test
     public void mustNotFindAnyObject() {
         given(repository.findAll()).willReturn(new ArrayList<>());
-        List<Category> categories = service.findAll();
-        assertThat(categories.size(), is(equalTo(NO_ELEMENTS)));
+        List<Category> objects = service.findAll();
+        assertThat(objects.size(), is(equalTo(NO_ELEMENTS)));
+    }
+
+    @Test
+    public void mustFindByPage() {
+        given(repository.findAll(any(PageRequest.class)))
+            .willReturn(new PageImpl<>(asList(new Category(OBJECT_NAME), new Category(OBJECT_NAME))));
+
+        Page<CategoryDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
+        assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
+        assertThat(TOTAL_PAGES, is(equalTo(objects.getTotalPages())));
     }
 
     @Test

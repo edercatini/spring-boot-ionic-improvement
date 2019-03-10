@@ -5,6 +5,9 @@ import com.edercatini.spring.dto.CategoryDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
 import com.edercatini.spring.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<CategoryDto> findByPage(Integer page, Integer size, String direction, String properties) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), properties);
+        Page<Category> list = repository.findAll(pageRequest);
+        return list.map(category -> new CategoryDto(category.getName()));
     }
 
     @Override

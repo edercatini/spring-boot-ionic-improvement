@@ -5,6 +5,9 @@ import com.edercatini.spring.dto.ProductDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
 import com.edercatini.spring.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +34,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<ProductDto> findByPage(Integer page, Integer size, String direction, String properties) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), properties);
+        Page<Product> list = repository.findAll(pageRequest);
+        return list.map(product -> new ProductDto(product.getName(), product.getPrice()));
     }
 
     @Override

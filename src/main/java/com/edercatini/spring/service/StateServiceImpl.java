@@ -5,6 +5,9 @@ import com.edercatini.spring.dto.StateDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
 import com.edercatini.spring.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +34,13 @@ public class StateServiceImpl implements StateService {
     @Override
     public List<State> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<StateDto> findByPage(Integer page, Integer size, String direction, String properties) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), properties);
+        Page<State> list = repository.findAll(pageRequest);
+        return list.map(state -> new StateDto(state.getName()));
     }
 
     @Override

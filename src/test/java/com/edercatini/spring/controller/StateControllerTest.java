@@ -1,6 +1,7 @@
 package com.edercatini.spring.controller;
 
 import com.edercatini.spring.domain.State;
+import com.edercatini.spring.dto.StateDto;
 import com.edercatini.spring.service.StateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,6 +37,9 @@ public class StateControllerTest {
     private static final String INVALID_ENDPOINT = "/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
     private static final String INVALID_REQUEST_BODY = "invalid";
+    private static final String API_PAGE_URL = "/api/" + ENTITY + "/page";
+    private static final Integer TOTAL_PAGES = 1;
+    private static final Integer TOTAL_ELEMENTS = 2;
 
     @Autowired
     private MockMvc mvc;
@@ -63,6 +67,22 @@ public class StateControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].name").value(OBJECT_NAME))
             .andExpect(jsonPath("$[1].name").value(OBJECT_NAME));
+    }
+
+    @Test
+    public void mustFindByPage() throws Exception {
+        List<State> objects = new ArrayList<>(asList(new State(OBJECT_NAME), new State(OBJECT_NAME)));
+
+        given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
+            .willReturn(new PageImpl<>(asList(new StateDto(OBJECT_NAME), new StateDto(OBJECT_NAME))));
+
+        mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content[0].name").value(OBJECT_NAME))
+            .andExpect(jsonPath("$.content[1].name").value(OBJECT_NAME))
+            .andExpect(jsonPath("$.totalPages").value(TOTAL_PAGES))
+            .andExpect(jsonPath("$.totalElements").value(TOTAL_ELEMENTS));
     }
 
     @Test

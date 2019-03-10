@@ -4,6 +4,7 @@ import com.edercatini.spring.domain.City;
 import com.edercatini.spring.dto.CityDto;
 import com.edercatini.spring.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -36,6 +37,16 @@ public class CityController {
     public ResponseEntity<List<City>> findAll() {
         List<City> objects = service.findAll();
         return ok().body(objects);
+    }
+
+    @GetMapping(value = "/page")
+    public ResponseEntity<Page<CityDto>> findByPage(
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "24") Integer size,
+        @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+        @RequestParam(value = "properties", defaultValue = "name") String properties) {
+        Page<CityDto> list = service.findByPage(page, size, direction, properties);
+        return ok().body(list);
     }
 
     @PostMapping
