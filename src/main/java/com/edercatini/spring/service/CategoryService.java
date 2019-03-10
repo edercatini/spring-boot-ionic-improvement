@@ -11,9 +11,9 @@ public interface CategoryService {
 
     List<Category> findAll();
 
-    List<Category> save(CategoryDto categoryDto);
+    List<Category> save(CategoryDto dto);
 
-    void update(Long id, CategoryDto categoryDto);
+    void update(Long id, CategoryDto dto);
 
     void delete(Long id);
 }
