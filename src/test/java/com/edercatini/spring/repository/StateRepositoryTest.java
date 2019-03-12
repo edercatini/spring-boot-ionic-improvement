@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
+import static com.edercatini.spring.builder.domain.StateDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -30,7 +31,7 @@ public class StateRepositoryTest {
 
     @Before
     public void setUp() {
-        State object = new State(OBJECT_NAME);
+        State object = anObject().build();
         repository.saveAll(asList(object));
     }
 
@@ -67,7 +68,7 @@ public class StateRepositoryTest {
 
     @Test
     public void mustSaveAnItem() {
-        State object = new State(OBJECT_NAME);
+        State object = anObject().build();
         State savedObject = repository.save(object);
         assertThat(savedObject.getName(), is(equalTo(OBJECT_NAME)));
     }

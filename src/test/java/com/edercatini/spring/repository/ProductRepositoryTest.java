@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
+import static com.edercatini.spring.builder.domain.ProductDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,7 +32,7 @@ public class ProductRepositoryTest {
 
     @Before
     public void setUp() {
-        Product object = new Product(OBJECT_NAME, OBJECT_PRICE);
+        Product object = anObject().build();
         repository.saveAll(asList(object));
     }
 
@@ -68,7 +69,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void mustSaveAnItem() {
-        Product object = new Product(OBJECT_NAME, OBJECT_PRICE);
+        Product object = anObject().build();
         Product savedObject = repository.save(object);
         assertThat(savedObject.getName(), is(equalTo(OBJECT_NAME)));
     }

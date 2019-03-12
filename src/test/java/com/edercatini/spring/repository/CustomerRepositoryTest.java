@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.edercatini.spring.builder.domain.CustomerDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -37,7 +38,7 @@ public class CustomerRepositoryTest {
 
     @Before
     public void setUp() {
-        Customer object = new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE);
+        Customer object = anObject().build();
         repository.saveAll(asList(object));
     }
 
@@ -74,7 +75,7 @@ public class CustomerRepositoryTest {
 
     @Test
     public void mustSaveAnItem() {
-        Customer object = new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE);
+        Customer object = anObject().build();
         Customer savedObject = repository.save(object);
         assertThat(savedObject.getName(), is(equalTo(OBJECT_NAME)));
     }

@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.edercatini.spring.builder.domain.CityDataBuilder.anObject;
+import static com.edercatini.spring.builder.dto.CityDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -52,7 +54,7 @@ public class CityServiceImplTest {
 
     @Test
     public void mustFindById() {
-        given(repository.findById(anyLong())).willReturn(of(new City(OBJECT_NAME)));
+        given(repository.findById(anyLong())).willReturn(of(anObject().build()));
         City object = service.findById(PARAM_ID);
         assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -65,7 +67,7 @@ public class CityServiceImplTest {
 
     @Test
     public void mustFindAllObjects() {
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(new City(OBJECT_NAME))));
+        given(repository.findAll()).willReturn(new ArrayList<>(asList(anObject().build())));
         List<City> categories = service.findAll();
         assertThat(categories.get(0).getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -80,7 +82,7 @@ public class CityServiceImplTest {
     @Test
     public void mustFindByPage() {
         given(repository.findAll(any(PageRequest.class)))
-            .willReturn(new PageImpl<>(asList(new City(OBJECT_NAME), new City(OBJECT_NAME))));
+            .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
         Page<CityDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
         assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
@@ -89,8 +91,8 @@ public class CityServiceImplTest {
 
     @Test
     public void mustSaveAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new City(OBJECT_NAME))));
-        CityDto dto = new CityDto(OBJECT_NAME);
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
+        CityDto dto = dto().build();
         List<City> object = service.save(dto);
         assertTrue(object.get(0) instanceof City);
         assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
@@ -98,10 +100,10 @@ public class CityServiceImplTest {
 
     @Test
     public void mustUpdateAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new City(OBJECT_NAME))));
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         given(repository.findById(anyLong())).willReturn(Optional.of(new City()));
 
-        service.update(PARAM_ID, new CityDto(OBJECT_NAME));
+        service.update(PARAM_ID, dto().build());
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
@@ -110,12 +112,12 @@ public class CityServiceImplTest {
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotUpdateAnObjectDueToInvalidId() {
         given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, new CityDto(OBJECT_NAME));
+        service.update(PARAM_ID, dto().build());
     }
 
     @Test
     public void mustDeleteAnObject() {
-        given(repository.findById(anyLong())).willReturn(Optional.of(new City(OBJECT_NAME)));
+        given(repository.findById(anyLong())).willReturn(Optional.of(anObject().build()));
         doNothing().when(repository).deleteById(anyLong());
         service.delete(PARAM_ID);
 

@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.edercatini.spring.builder.domain.CategoryDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CategoryControllerTest {
 
     private static final String ENTITY = "category";
-    private static final String OBJECT_NAME = "Test";
+    private static final String OBJECT_NAME = "Category";
     private static final String API_BASE_URL = "/" + ENTITY;
     private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
@@ -49,7 +50,7 @@ public class CategoryControllerTest {
 
     @Test
     public void mustFindById() throws Exception {
-        given(service.findById(anyLong())).willReturn(new Category(OBJECT_NAME));
+        given(service.findById(anyLong())).willReturn(anObject().build());
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(MediaType.APPLICATION_JSON))
@@ -59,7 +60,7 @@ public class CategoryControllerTest {
 
     @Test
     public void mustFindAll() throws Exception {
-        List<Category> objects = new ArrayList<>(asList(new Category(OBJECT_NAME), new Category(OBJECT_NAME)));
+        List<Category> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
         given(service.findAll()).willReturn(new ArrayList<>(objects));
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
@@ -71,7 +72,7 @@ public class CategoryControllerTest {
 
     @Test
     public void mustFindByPage() throws Exception {
-        List<Category> objects = new ArrayList<>(asList(new Category(OBJECT_NAME), new Category(OBJECT_NAME)));
+        List<Category> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
 
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
             .willReturn(new PageImpl<>(asList(new CategoryDto(OBJECT_NAME), new CategoryDto(OBJECT_NAME))));
@@ -94,7 +95,7 @@ public class CategoryControllerTest {
 
     @Test
     public void mustSaveAnObject() throws Exception {
-        Category object = new Category(OBJECT_NAME);
+        Category object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
@@ -121,7 +122,7 @@ public class CategoryControllerTest {
 
     @Test
     public void mustUpdateAnObject() throws Exception {
-        Category object = new Category(OBJECT_NAME);
+        Category object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         doNothing().when(service).update(anyLong(), any());

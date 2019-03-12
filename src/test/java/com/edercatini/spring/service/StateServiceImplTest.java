@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.edercatini.spring.builder.domain.StateDataBuilder.anObject;
+import static com.edercatini.spring.builder.dto.StateDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -52,7 +54,7 @@ public class StateServiceImplTest {
 
     @Test
     public void mustFindById() {
-        given(repository.findById(anyLong())).willReturn(of(new State(OBJECT_NAME)));
+        given(repository.findById(anyLong())).willReturn(of(anObject().build()));
         State object = service.findById(PARAM_ID);
         assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -65,7 +67,7 @@ public class StateServiceImplTest {
 
     @Test
     public void mustFindAllObjects() {
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(new State(OBJECT_NAME))));
+        given(repository.findAll()).willReturn(new ArrayList<>(asList(anObject().build())));
         List<State> categories = service.findAll();
         assertThat(categories.get(0).getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -80,7 +82,7 @@ public class StateServiceImplTest {
     @Test
     public void mustFindByPage() {
         given(repository.findAll(any(PageRequest.class)))
-            .willReturn(new PageImpl<>(asList(new State(OBJECT_NAME), new State(OBJECT_NAME))));
+            .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
         Page<StateDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
         assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
@@ -89,8 +91,8 @@ public class StateServiceImplTest {
 
     @Test
     public void mustSaveAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new State(OBJECT_NAME))));
-        StateDto dto = new StateDto(OBJECT_NAME);
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
+        StateDto dto = dto().build();
         List<State> object = service.save(dto);
         assertTrue(object.get(0) instanceof State);
         assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
@@ -98,10 +100,10 @@ public class StateServiceImplTest {
 
     @Test
     public void mustUpdateAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new State(OBJECT_NAME))));
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         given(repository.findById(anyLong())).willReturn(Optional.of(new State()));
 
-        service.update(PARAM_ID, new StateDto(OBJECT_NAME));
+        service.update(PARAM_ID, dto().build());
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
@@ -110,12 +112,12 @@ public class StateServiceImplTest {
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotUpdateAnObjectDueToInvalidId() {
         given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, new StateDto(OBJECT_NAME));
+        service.update(PARAM_ID, dto().build());
     }
 
     @Test
     public void mustDeleteAnObject() {
-        given(repository.findById(anyLong())).willReturn(Optional.of(new State(OBJECT_NAME)));
+        given(repository.findById(anyLong())).willReturn(Optional.of(anObject().build()));
         doNothing().when(repository).deleteById(anyLong());
         service.delete(PARAM_ID);
 

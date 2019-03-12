@@ -1,7 +1,6 @@
 package com.edercatini.spring.controller;
 
 import com.edercatini.spring.domain.Product;
-import com.edercatini.spring.dto.ProductDto;
 import com.edercatini.spring.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -19,6 +18,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.edercatini.spring.builder.domain.ProductDataBuilder.anObject;
+import static com.edercatini.spring.builder.dto.ProductDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
 
     private static final String ENTITY = "product";
-    private static final String OBJECT_NAME = "Test";
+    private static final String OBJECT_NAME = "Product";
     private static final Double OBJECT_PRICE = 1000d;
     private static final String API_BASE_URL = "/" + ENTITY;
     private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
@@ -50,7 +51,7 @@ public class ProductControllerTest {
 
     @Test
     public void mustFindById() throws Exception {
-        given(service.findById(anyLong())).willReturn(new Product(OBJECT_NAME, OBJECT_PRICE));
+        given(service.findById(anyLong())).willReturn(anObject().build());
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(MediaType.APPLICATION_JSON))
@@ -60,7 +61,7 @@ public class ProductControllerTest {
 
     @Test
     public void mustFindAll() throws Exception {
-        List<Product> objects = new ArrayList<>(asList(new Product(OBJECT_NAME, OBJECT_PRICE), new Product(OBJECT_NAME, OBJECT_PRICE)));
+        List<Product> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
         given(service.findAll()).willReturn(new ArrayList<>(objects));
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
@@ -74,10 +75,10 @@ public class ProductControllerTest {
 
     @Test
     public void mustFindByPage() throws Exception {
-        List<Product> objects = new ArrayList<>(asList(new Product(OBJECT_NAME, OBJECT_PRICE), new Product(OBJECT_NAME, OBJECT_PRICE)));
+        List<Product> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
 
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
-            .willReturn(new PageImpl<>(asList(new ProductDto(OBJECT_NAME, OBJECT_PRICE), new ProductDto(OBJECT_NAME, OBJECT_PRICE))));
+            .willReturn(new PageImpl<>(asList(dto().build(), dto().build())));
 
         mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
             .accept(MediaType.APPLICATION_JSON))
@@ -99,7 +100,7 @@ public class ProductControllerTest {
 
     @Test
     public void mustSaveAnObject() throws Exception {
-        Product object = new Product(OBJECT_NAME, OBJECT_PRICE);
+        Product object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
@@ -126,7 +127,7 @@ public class ProductControllerTest {
 
     @Test
     public void mustUpdateAnObject() throws Exception {
-        Product object = new Product(OBJECT_NAME, OBJECT_PRICE);
+        Product object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         doNothing().when(service).update(anyLong(), any());

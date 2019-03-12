@@ -17,6 +17,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
+import static com.edercatini.spring.builder.domain.CustomerDataBuilder.anObject;
+import static com.edercatini.spring.builder.dto.CustomerDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -34,7 +36,7 @@ import static org.mockito.Mockito.*;
 public class CustomerServiceImplTest {
 
     private static final String OBJECT_NAME = "Customer";
-    private static final String OBJECT_MAIL = "Mail";
+    private static final String OBJECT_MAIL = "test@test.com";
     private static final String OBJECT_DOCUMENT = "9999999999";
     private static final CustomerTypes OBJECT_TYPE = CustomerTypes.PHYSICAL_PERSON;
     private static final Set<String> PHONES = new HashSet<>();
@@ -55,7 +57,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void mustFindById() {
-        given(repository.findById(anyLong())).willReturn(of(new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE)));
+        given(repository.findById(anyLong())).willReturn(of(anObject().build()));
         Customer object = service.findById(PARAM_ID);
         assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -68,7 +70,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void mustFindAllObjects() {
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE))));
+        given(repository.findAll()).willReturn(new ArrayList<>(asList(anObject().build())));
         List<Customer> categories = service.findAll();
         assertThat(categories.get(0).getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -83,7 +85,7 @@ public class CustomerServiceImplTest {
     @Test
     public void mustFindByPage() {
         given(repository.findAll(any(PageRequest.class)))
-            .willReturn(new PageImpl<>(asList(new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE), new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE))));
+            .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
         Page<CustomerDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
         assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
@@ -92,8 +94,8 @@ public class CustomerServiceImplTest {
 
     @Test
     public void mustSaveAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE))));
-        CustomerDto dto = new CustomerDto(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE.getId(), PHONES);
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
+        CustomerDto dto = dto().build();
         List<Customer> object = service.save(dto);
         assertTrue(object.get(0) instanceof Customer);
         assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
@@ -101,10 +103,10 @@ public class CustomerServiceImplTest {
 
     @Test
     public void mustUpdateAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE))));
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         given(repository.findById(anyLong())).willReturn(Optional.of(new Customer()));
 
-        service.update(PARAM_ID, new CustomerDto(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE.getId(), PHONES));
+        service.update(PARAM_ID, dto().build());
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
@@ -112,13 +114,13 @@ public class CustomerServiceImplTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotUpdateAnObjectDueToInvalidId() {
-        given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, new CustomerDto(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE.getId(), PHONES));
+        given(repository.findById(anyLong())).willReturn(empty());
+        service.update(PARAM_ID, dto().build());
     }
 
     @Test
     public void mustDeleteAnObject() {
-        given(repository.findById(anyLong())).willReturn(Optional.of(new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE)));
+        given(repository.findById(anyLong())).willReturn(Optional.of(anObject().build()));
         doNothing().when(repository).deleteById(anyLong());
         service.delete(PARAM_ID);
 
@@ -128,7 +130,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotDeleteAnObjectDueToInvalidId() {
-        given(repository.findById(anyLong())).willReturn(Optional.empty());
+        given(repository.findById(anyLong())).willReturn(empty());
         service.delete(PARAM_ID);
     }
 }

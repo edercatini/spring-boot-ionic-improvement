@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.edercatini.spring.builder.domain.ProductDataBuilder.anObject;
+import static com.edercatini.spring.builder.dto.ProductDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -53,7 +55,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void mustFindById() {
-        given(repository.findById(anyLong())).willReturn(of(new Product(OBJECT_NAME, OBJECT_PRICE)));
+        given(repository.findById(anyLong())).willReturn(of(anObject().build()));
         Product object = service.findById(PARAM_ID);
         assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -66,7 +68,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void mustFindAllObjects() {
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(new Product(OBJECT_NAME, OBJECT_PRICE))));
+        given(repository.findAll()).willReturn(new ArrayList<>(asList(anObject().build())));
         List<Product> categories = service.findAll();
         assertThat(categories.get(0).getName(), is(equalTo(OBJECT_NAME)));
     }
@@ -81,7 +83,7 @@ public class ProductServiceImplTest {
     @Test
     public void mustFindByPage() {
         given(repository.findAll(any(PageRequest.class)))
-            .willReturn(new PageImpl<>(asList(new Product(OBJECT_NAME, OBJECT_PRICE), new Product(OBJECT_NAME, OBJECT_PRICE))));
+            .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
         Page<ProductDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
         assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
@@ -90,8 +92,8 @@ public class ProductServiceImplTest {
 
     @Test
     public void mustSaveAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new Product(OBJECT_NAME, OBJECT_PRICE))));
-        ProductDto dto = new ProductDto(OBJECT_NAME, OBJECT_PRICE);
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
+        ProductDto dto = dto().build();
         List<Product> object = service.save(dto);
         assertTrue(object.get(0) instanceof Product);
         assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
@@ -99,10 +101,10 @@ public class ProductServiceImplTest {
 
     @Test
     public void mustUpdateAnObject() {
-        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(new Product(OBJECT_NAME, OBJECT_PRICE))));
+        given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         given(repository.findById(anyLong())).willReturn(Optional.of(new Product()));
 
-        service.update(PARAM_ID, new ProductDto(OBJECT_NAME, OBJECT_PRICE));
+        service.update(PARAM_ID, dto().build());
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
@@ -111,12 +113,12 @@ public class ProductServiceImplTest {
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotUpdateAnObjectDueToInvalidId() {
         given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, new ProductDto(OBJECT_NAME, OBJECT_PRICE));
+        service.update(PARAM_ID, dto().build());
     }
 
     @Test
     public void mustDeleteAnObject() {
-        given(repository.findById(anyLong())).willReturn(Optional.of(new Product(OBJECT_NAME, OBJECT_PRICE)));
+        given(repository.findById(anyLong())).willReturn(Optional.of(anObject().build()));
         doNothing().when(repository).deleteById(anyLong());
         service.delete(PARAM_ID);
 

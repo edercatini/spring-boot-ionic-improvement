@@ -1,7 +1,6 @@
 package com.edercatini.spring.controller;
 
 import com.edercatini.spring.domain.City;
-import com.edercatini.spring.dto.CityDto;
 import com.edercatini.spring.service.CityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -19,6 +18,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.edercatini.spring.builder.domain.CityDataBuilder.anObject;
+import static com.edercatini.spring.builder.dto.CityDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CityControllerTest {
 
     private static final String ENTITY = "city";
-    private static final String OBJECT_NAME = "Test";
+    private static final String OBJECT_NAME = "City";
     private static final String API_BASE_URL = "/" + ENTITY;
     private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
@@ -49,7 +50,7 @@ public class CityControllerTest {
 
     @Test
     public void mustFindById() throws Exception {
-        given(service.findById(anyLong())).willReturn(new City(OBJECT_NAME));
+        given(service.findById(anyLong())).willReturn(anObject().build());
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(MediaType.APPLICATION_JSON))
@@ -59,7 +60,7 @@ public class CityControllerTest {
 
     @Test
     public void mustFindAll() throws Exception {
-        List<City> objects = new ArrayList<>(asList(new City(OBJECT_NAME), new City(OBJECT_NAME)));
+        List<City> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
         given(service.findAll()).willReturn(new ArrayList<>(objects));
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
@@ -71,10 +72,10 @@ public class CityControllerTest {
 
     @Test
     public void mustFindByPage() throws Exception {
-        List<City> objects = new ArrayList<>(asList(new City(OBJECT_NAME), new City(OBJECT_NAME)));
+        List<City> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
 
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
-            .willReturn(new PageImpl<>(asList(new CityDto(OBJECT_NAME), new CityDto(OBJECT_NAME))));
+            .willReturn(new PageImpl<>(asList(dto().build(), dto().build())));
 
         mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
             .accept(MediaType.APPLICATION_JSON))
@@ -94,7 +95,7 @@ public class CityControllerTest {
 
     @Test
     public void mustSaveAnObject() throws Exception {
-        City object = new City(OBJECT_NAME);
+        City object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
@@ -121,7 +122,7 @@ public class CityControllerTest {
 
     @Test
     public void mustUpdateAnObject() throws Exception {
-        City object = new City(OBJECT_NAME);
+        City object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         doNothing().when(service).update(anyLong(), any());

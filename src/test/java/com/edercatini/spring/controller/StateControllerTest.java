@@ -1,7 +1,7 @@
 package com.edercatini.spring.controller;
 
+import com.edercatini.spring.builder.domain.StateDataBuilder;
 import com.edercatini.spring.domain.State;
-import com.edercatini.spring.dto.StateDto;
 import com.edercatini.spring.service.StateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.edercatini.spring.builder.dto.StateDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class StateControllerTest {
 
     private static final String ENTITY = "state";
-    private static final String OBJECT_NAME = "Test";
+    private static final String OBJECT_NAME = "State";
     private static final String API_BASE_URL = "/" + ENTITY;
     private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
@@ -49,7 +50,7 @@ public class StateControllerTest {
 
     @Test
     public void mustFindById() throws Exception {
-        given(service.findById(anyLong())).willReturn(new State(OBJECT_NAME));
+        given(service.findById(anyLong())).willReturn(StateDataBuilder.anObject().build());
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(MediaType.APPLICATION_JSON))
@@ -59,7 +60,7 @@ public class StateControllerTest {
 
     @Test
     public void mustFindAll() throws Exception {
-        List<State> objects = new ArrayList<>(asList(new State(OBJECT_NAME), new State(OBJECT_NAME)));
+        List<State> objects = new ArrayList<>(asList(StateDataBuilder.anObject().build(), StateDataBuilder.anObject().build()));
         given(service.findAll()).willReturn(new ArrayList<>(objects));
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
@@ -71,10 +72,10 @@ public class StateControllerTest {
 
     @Test
     public void mustFindByPage() throws Exception {
-        List<State> objects = new ArrayList<>(asList(new State(OBJECT_NAME), new State(OBJECT_NAME)));
+        List<State> objects = new ArrayList<>(asList(StateDataBuilder.anObject().build(), StateDataBuilder.anObject().build()));
 
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
-            .willReturn(new PageImpl<>(asList(new StateDto(OBJECT_NAME), new StateDto(OBJECT_NAME))));
+            .willReturn(new PageImpl<>(asList(dto().build(), dto().build())));
 
         mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
             .accept(MediaType.APPLICATION_JSON))
@@ -94,7 +95,7 @@ public class StateControllerTest {
 
     @Test
     public void mustSaveAnObject() throws Exception {
-        State object = new State(OBJECT_NAME);
+        State object = StateDataBuilder.anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
@@ -121,7 +122,7 @@ public class StateControllerTest {
 
     @Test
     public void mustUpdateAnObject() throws Exception {
-        State object = new State(OBJECT_NAME);
+        State object = StateDataBuilder.anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
         doNothing().when(service).update(anyLong(), any());
