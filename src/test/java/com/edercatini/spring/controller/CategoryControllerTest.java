@@ -1,5 +1,6 @@
 package com.edercatini.spring.controller;
 
+import com.edercatini.spring.builder.dto.CategoryDtoDataBuilder;
 import com.edercatini.spring.domain.Category;
 import com.edercatini.spring.dto.CategoryDto;
 import com.edercatini.spring.service.CategoryService;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.edercatini.spring.builder.domain.CategoryDataBuilder.anObject;
+import static com.edercatini.spring.builder.dto.CategoryDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -75,7 +77,7 @@ public class CategoryControllerTest {
         List<Category> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
 
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
-            .willReturn(new PageImpl<>(asList(new CategoryDto(OBJECT_NAME), new CategoryDto(OBJECT_NAME))));
+            .willReturn(new PageImpl<>(asList(dto().build(), dto().build())));
 
         mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
             .accept(MediaType.APPLICATION_JSON))
