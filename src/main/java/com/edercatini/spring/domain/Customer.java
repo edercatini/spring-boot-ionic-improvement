@@ -31,6 +31,9 @@ public class Customer extends AbstractEntity<Long> {
     @CollectionTable(name = "PHONES")
     private Set<String> phones = new HashSet<>();
 
+    @OneToMany(mappedBy = "customer")
+    private List<Purchase> purchases = new ArrayList<>();
+
     public Customer() {
     }
 
