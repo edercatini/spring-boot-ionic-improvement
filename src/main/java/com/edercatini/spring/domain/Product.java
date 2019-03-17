@@ -3,12 +3,11 @@ package com.edercatini.spring.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -21,6 +20,10 @@ public class Product extends AbstractEntity<Long> {
     @ManyToMany
     @JoinTable(name = "PRODUCT_CATEGORY", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.product")
+    private Set<PurchaseItem> items = new HashSet<>();
 
     public Product() {
     }

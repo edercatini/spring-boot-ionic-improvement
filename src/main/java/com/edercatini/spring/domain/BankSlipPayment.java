@@ -1,6 +1,7 @@
 package com.edercatini.spring.domain;
 
 import com.edercatini.spring.enums.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 
@@ -15,7 +16,10 @@ public class BankSlipPayment extends Payment implements Serializable {
 
     private static final long serialVersionUID = -4866629838087294575L;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date paymentDate;
 
     public BankSlipPayment() {

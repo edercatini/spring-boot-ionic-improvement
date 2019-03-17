@@ -5,12 +5,13 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import static javax.persistence.CascadeType.ALL;
+import java.io.Serializable;
 
 @Entity
 @Data
-public class Address extends AbstractEntity<Long> {
+public class Address extends AbstractEntity<Long> implements Serializable {
+
+    private static final long serialVersionUID = 1636590043603307268L;
 
     private String publicPlace;
     private String number;
@@ -21,6 +22,10 @@ public class Address extends AbstractEntity<Long> {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
 
     public Address() {
     }

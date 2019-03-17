@@ -7,14 +7,19 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
+
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import static javax.persistence.InheritanceType.JOINED;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = JOINED)
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "@type")
 @Data
-public abstract class Payment extends AbstractEntity<Long> {
+public abstract class Payment extends AbstractEntity<Long> implements Serializable {
+
+    private static final long serialVersionUID = 4649437255271824370L;
 
     private Long paymentStatus;
 

@@ -1,12 +1,14 @@
 package com.edercatini.spring.domain;
 
 import com.edercatini.spring.enums.CustomerTypes;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +19,9 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data
-public class Customer extends AbstractEntity<Long> {
+public class Customer extends AbstractEntity<Long> implements Serializable {
+
+    private static final long serialVersionUID = -1235205585871107822L;
 
     private String name;
     private String mail;
@@ -31,6 +35,7 @@ public class Customer extends AbstractEntity<Long> {
     @CollectionTable(name = "PHONES")
     private Set<String> phones = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer")
     private List<Purchase> purchases = new ArrayList<>();
 

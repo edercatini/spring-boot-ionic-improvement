@@ -3,11 +3,10 @@ package com.edercatini.spring.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -28,6 +27,9 @@ public class Purchase extends AbstractEntity<Long> {
 
     @OneToOne(cascade = ALL, mappedBy = "purchase")
     private Payment payment;
+
+    @OneToMany(mappedBy = "id.purchase")
+    private Set<PurchaseItem> items = new HashSet<>();
 
     public Purchase() {
     }
