@@ -6,7 +6,10 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.util.Date;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Data
@@ -22,6 +25,9 @@ public class Purchase extends AbstractEntity<Long> {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToOne(cascade = ALL, mappedBy = "purchase")
+    private Payment payment;
 
     public Purchase() {
     }
