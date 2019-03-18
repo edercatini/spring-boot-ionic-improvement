@@ -32,4 +32,15 @@ public class Product extends AbstractEntity<Long> {
         this.name = name;
         this.price = price;
     }
+
+    @JsonIgnore
+    public List<Purchase> getPurchases() {
+        List<Purchase> lista = new ArrayList<>();
+
+        for (PurchaseItem purchaseItem : items) {
+            lista.add(purchaseItem.getPurchase());
+        }
+
+        return lista;
+    }
 }

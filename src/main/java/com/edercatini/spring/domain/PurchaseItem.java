@@ -36,4 +36,21 @@ public class PurchaseItem implements Serializable {
         this.quantity = quantity;
         this.price = price;
     }
+
+    @JsonIgnore
+    public Purchase getPurchase() {
+        return id.getPurchase();
+    }
+
+    public Product getProduct() {
+        return id.getProduct();
+    }
+
+    public PurchaseItemPK getId() {
+        return id;
+    }
+
+    public void setId(PurchaseItemPK id) {
+        this.id = id;
+    }
 }

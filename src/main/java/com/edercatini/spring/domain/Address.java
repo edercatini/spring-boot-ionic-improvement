@@ -38,4 +38,14 @@ public class Address extends AbstractEntity<Long> implements Serializable {
         this.postalCode = postalCode;
         this.customer = customer;
     }
+
+    public Address(String publicPlace, String number, String complement, String neighborhood, String postalCode, Customer customer, City city) {
+        this.publicPlace = publicPlace;
+        this.number = number;
+        this.complement = complement;
+        this.neighborhood = neighborhood;
+        this.postalCode = postalCode;
+        this.customer = customer;
+        this.city = city;
+    }
 }

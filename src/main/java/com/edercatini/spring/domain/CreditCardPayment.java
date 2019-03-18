@@ -23,4 +23,10 @@ public class CreditCardPayment extends Payment implements Serializable {
         super(paymentStatus);
         this.numberOfBills = numberOfBills;
     }
+
+    public CreditCardPayment(PaymentStatus paymentStatus, Purchase purchase, Integer numberOfBills) {
+        super(paymentStatus);
+        this.numberOfBills = numberOfBills;
+        this.setPurchase(purchase);
+    }
 }

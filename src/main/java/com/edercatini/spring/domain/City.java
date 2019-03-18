@@ -25,4 +25,9 @@ public class City extends AbstractEntity<Long> implements Serializable {
     public City(String name) {
         this.name = name;
     }
+
+    public City(String name, State state) {
+        this.name = name;
+        this.state = state;
+    }
 }

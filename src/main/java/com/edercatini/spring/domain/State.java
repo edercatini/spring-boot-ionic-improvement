@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +19,7 @@ public class State extends AbstractEntity<Long> implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "state")
-    private List<City> cities;
+    private List<City> cities = new ArrayList<>();
 
     public State() {
     }

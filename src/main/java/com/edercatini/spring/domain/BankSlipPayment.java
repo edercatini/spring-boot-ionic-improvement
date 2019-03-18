@@ -30,4 +30,11 @@ public class BankSlipPayment extends Payment implements Serializable {
         this.dueDate = dueDate;
         this.paymentDate = paymentDate;
     }
+
+    public BankSlipPayment(PaymentStatus paymentStatus, Purchase purchase, Date dueDate, Date paymentDate) {
+        super(paymentStatus);
+        this.dueDate = dueDate;
+        this.paymentDate = paymentDate;
+        this.setPurchase(purchase);
+    }
 }

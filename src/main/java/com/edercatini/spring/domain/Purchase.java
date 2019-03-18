@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -29,7 +29,7 @@ public class Purchase extends AbstractEntity<Long> {
     private Payment payment;
 
     @OneToMany(mappedBy = "id.purchase")
-    private Set<PurchaseItem> items = new HashSet<>();
+    private List<PurchaseItem> items = new ArrayList<>();
 
     public Purchase() {
     }
