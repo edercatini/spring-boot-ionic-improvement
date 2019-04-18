@@ -14,7 +14,7 @@ public interface AddressService {
 
     Page<AddressDto> findByPage(Integer page, Integer size, String direction, String properties);
 
-    List<Address> save(AddressDto dto);
+    Address save(AddressDto dto);
 
     void update(Long id, AddressDto dto);
 

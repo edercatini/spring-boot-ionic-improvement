@@ -93,9 +93,9 @@ public class StateServiceImplTest {
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         StateDto dto = dto().build();
-        List<State> object = service.save(dto);
-        assertTrue(object.get(0) instanceof State);
-        assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
+        State object = service.save(dto);
+        assertTrue(object instanceof State);
+        assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test

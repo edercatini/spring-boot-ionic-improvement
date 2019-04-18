@@ -14,7 +14,7 @@ public interface CityService {
 
     Page<CityDto> findByPage(Integer page, Integer size, String direction, String properties);
 
-    List<City> save(CityDto dto);
+    City save(CityDto dto);
 
     void update(Long id, CityDto dto);
 

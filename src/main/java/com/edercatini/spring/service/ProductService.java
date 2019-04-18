@@ -14,7 +14,7 @@ public interface ProductService {
 
     Page<ProductDto> findByPage(Integer page, Integer size, String direction, String properties);
 
-    List<Product> save(ProductDto dtu);
+    Product save(ProductDto dtu);
 
     void update(Long id, ProductDto dto);
 

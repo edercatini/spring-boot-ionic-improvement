@@ -17,7 +17,6 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,12 +45,6 @@ public class ProductRepositoryTest {
         List<Product> objects = repository.findAll();
         Optional<Product> object = repository.findById(objects.get(0).getId());
         assertThat(object.get().getName(), is(equalTo(OBJECT_NAME)));
-    }
-
-    @Test
-    public void mustNotFindById() {
-        Optional<Product> object = repository.findById(INVALID_PARAM_ID);
-        assertTrue(object.isEmpty());
     }
 
     @Test

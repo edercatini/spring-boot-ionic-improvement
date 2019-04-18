@@ -96,9 +96,9 @@ public class CustomerServiceImplTest {
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         CustomerDto dto = dto().build();
-        List<Customer> object = service.save(dto);
-        assertTrue(object.get(0) instanceof Customer);
-        assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
+        Customer object = service.save(dto);
+        assertTrue(object instanceof Customer);
+        assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test

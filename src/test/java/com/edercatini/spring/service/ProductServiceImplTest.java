@@ -94,9 +94,9 @@ public class ProductServiceImplTest {
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         ProductDto dto = dto().build();
-        List<Product> object = service.save(dto);
-        assertTrue(object.get(0) instanceof Product);
-        assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
+        Product object = service.save(dto);
+        assertTrue(object instanceof Product);
+        assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test

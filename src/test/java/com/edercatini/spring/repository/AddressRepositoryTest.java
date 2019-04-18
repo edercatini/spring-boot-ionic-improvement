@@ -19,7 +19,6 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -53,12 +52,6 @@ public class AddressRepositoryTest {
         List<Address> objects = repository.findAll();
         Optional<Address> object = repository.findById(objects.get(0).getId());
         assertThat(object.get().getPublicPlace(), is(equalTo(OBJECT_PUBLIC_PLACE)));
-    }
-
-    @Test
-    public void mustNotFindById() {
-        Optional<Address> object = repository.findById(INVALID_PARAM_ID);
-        assertTrue(object.isEmpty());
     }
 
     @Test

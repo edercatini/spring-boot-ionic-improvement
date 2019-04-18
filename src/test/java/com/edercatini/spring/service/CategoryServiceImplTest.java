@@ -93,9 +93,9 @@ public class CategoryServiceImplTest {
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         CategoryDto dto = dto().build();
-        List<Category> object = service.save(dto);
-        assertTrue(object.get(0) instanceof Category);
-        assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
+        Category object = service.save(dto);
+        assertTrue(object instanceof Category);
+        assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test

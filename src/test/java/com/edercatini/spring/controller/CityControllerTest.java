@@ -98,26 +98,13 @@ public class CityControllerTest {
         City object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
+        given(service.save(any())).willReturn(object);
 
         mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
             .content(json)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());
-    }
-
-    @Test
-    public void mustNotSaveDueToInvalidRequestBody() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(INVALID_REQUEST_BODY);
-        given(service.save(any())).willReturn(null);
-
-        mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
     }
 
     @Test

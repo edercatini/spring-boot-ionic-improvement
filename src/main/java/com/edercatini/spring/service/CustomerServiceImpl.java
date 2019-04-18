@@ -45,9 +45,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> save(CustomerDto dto) {
+    public Customer save(CustomerDto dto) {
         Customer object = new Customer(dto.getName(), dto.getMail(), dto.getDocument(), CustomerTypes.toEnum(dto.getType()));
-        return repository.saveAll(asList(object));
+        repository.saveAll(asList(object));
+        return object;
     }
 
     @Override

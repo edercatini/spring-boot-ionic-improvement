@@ -14,7 +14,7 @@ public interface PurchaseService {
 
     Page<PurchaseDto> findByPage(Integer page, Integer size, String direction, String properties);
 
-    List<Purchase> save(PurchaseDto dtu);
+    Purchase save(PurchaseDto dtu);
 
     void update(Long id, PurchaseDto dto);
 

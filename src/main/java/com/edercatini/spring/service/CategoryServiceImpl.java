@@ -44,9 +44,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> save(CategoryDto dto) {
+    public Category save(CategoryDto dto) {
         Category object = new Category(dto.getName());
-        return repository.saveAll(asList(object));
+        repository.saveAll(asList(object));
+        return object;
     }
 
     @Override

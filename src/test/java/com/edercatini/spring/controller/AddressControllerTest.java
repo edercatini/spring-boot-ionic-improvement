@@ -1,8 +1,6 @@
 package com.edercatini.spring.controller;
 
-import com.edercatini.spring.builder.dto.AddressDtoDataBuilder;
 import com.edercatini.spring.domain.Address;
-import com.edercatini.spring.dto.AddressDto;
 import com.edercatini.spring.service.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -100,7 +98,7 @@ public class AddressControllerTest {
         Address object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
+        given(service.save(any())).willReturn(object);
 
         mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
             .content(json)

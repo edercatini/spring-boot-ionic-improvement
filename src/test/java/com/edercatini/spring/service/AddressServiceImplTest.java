@@ -93,9 +93,9 @@ public class AddressServiceImplTest {
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         AddressDto dto = dto().build();
-        List<Address> object = service.save(dto);
-        assertTrue(object.get(0) instanceof Address);
-        assertThat(object.get(0).getPublicPlace(), is(equalTo(OBJECT_PUBLIC_PLACE)));
+        Address object = service.save(dto);
+        assertTrue(object instanceof Address);
+        assertThat(object.getPublicPlace(), is(equalTo(OBJECT_PUBLIC_PLACE)));
     }
 
     @Test

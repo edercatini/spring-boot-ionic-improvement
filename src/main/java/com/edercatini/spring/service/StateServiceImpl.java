@@ -44,9 +44,10 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public List<State> save(StateDto dto) {
+    public State save(StateDto dto) {
         State object = new State(dto.getName());
-        return repository.saveAll(asList(object));
+        repository.saveAll(asList(object));
+        return object;
     }
 
     @Override

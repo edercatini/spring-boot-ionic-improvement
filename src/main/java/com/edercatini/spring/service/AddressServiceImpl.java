@@ -40,13 +40,19 @@ public class AddressServiceImpl implements AddressService {
     public Page<AddressDto> findByPage(Integer page, Integer size, String direction, String properties) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), properties);
         Page<Address> list = repository.findAll(pageRequest);
-        return list.map(address -> new AddressDto(address.getPublicPlace(), address.getNumber(), address.getComplement(), address.getNeighborhood(), address.getPostalCode(), address.getCustomer()));
+
+        return list.map(address -> new AddressDto(address.getPublicPlace(), address.getNumber(), address.getComplement(),
+            address.getNeighborhood(), address.getPostalCode(), address.getCustomer()));
     }
 
     @Override
-    public List<Address> save(AddressDto dto) {
-        Address object = new Address(dto.getPublicPlace(), dto.getNumber(), dto.getComplement(), dto.getNeighborhood(), dto.getPostalCode(), dto.getCustomer());
-        return repository.saveAll(asList(object));
+    public Address save(AddressDto dto) {
+        Address object = new Address(dto.getPublicPlace(), dto.getNumber(), dto.getComplement(), dto.getNeighborhood(),
+            dto.getPostalCode(), dto.getCustomer());
+
+        repository.saveAll(asList(object));
+
+        return object;
     }
 
     @Override

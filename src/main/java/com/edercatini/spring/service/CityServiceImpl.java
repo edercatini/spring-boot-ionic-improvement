@@ -44,9 +44,10 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public List<City> save(CityDto dto) {
+    public City save(CityDto dto) {
         City object = new City(dto.getName());
-        return repository.saveAll(asList(object));
+        repository.saveAll(asList(object));
+        return object;
     }
 
     @Override

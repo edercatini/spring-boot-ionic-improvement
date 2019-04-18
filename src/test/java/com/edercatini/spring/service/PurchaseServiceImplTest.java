@@ -105,9 +105,9 @@ public class PurchaseServiceImplTest {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().withCustomer(customer).build())));
 
         PurchaseDto dto = dto().withCustomer(customer).build();
-        List<Purchase> object = service.save(dto);
-        assertTrue(object.get(0) instanceof Purchase);
-        assertThat(object.get(0).getCustomer().getName(), is(equalTo(CUSTOMER_NAME)));
+        Purchase object = service.save(dto);
+        assertTrue(object instanceof Purchase);
+        assertThat(object.getCustomer().getName(), is(equalTo(CUSTOMER_NAME)));
     }
 
     @Test

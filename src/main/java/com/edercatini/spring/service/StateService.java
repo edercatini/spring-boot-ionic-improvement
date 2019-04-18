@@ -14,7 +14,7 @@ public interface StateService {
 
     Page<StateDto> findByPage(Integer page, Integer size, String direction, String properties);
 
-    List<State> save(StateDto dto);
+    State save(StateDto dto);
 
     void update(Long id, StateDto dto);
 

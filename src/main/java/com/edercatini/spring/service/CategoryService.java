@@ -14,7 +14,7 @@ public interface CategoryService {
 
     Page<CategoryDto> findByPage(Integer page, Integer size, String direction, String properties);
 
-    List<Category> save(CategoryDto dto);
+    Category save(CategoryDto dto);
 
     void update(Long id, CategoryDto dto);
 

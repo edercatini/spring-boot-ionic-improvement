@@ -14,7 +14,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.ResponseEntity.created;
 
 @RestController
 @RequestMapping("/category")
@@ -30,53 +32,48 @@ public class CategoryController {
 
     @ApiOperation(value = "Searches for a specific Category by its ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Category> findById(@PathVariable Long id) {
-        Category object = service.findById(id);
-        return ok().body(object);
+    @ResponseStatus(OK)
+    public Category findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @ApiOperation(value = "Returns a complete set of Categories")
     @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
-        List<Category> objects = service.findAll();
-        return ok().body(objects);
+    @ResponseStatus(OK)
+    public List<Category> findAll() {
+        return service.findAll();
     }
 
     @ApiOperation(value = "Returns a complete set of Categories with paginated data")
     @GetMapping(value = "/page")
-    public ResponseEntity<Page<CategoryDto>> findByPage(
+    @ResponseStatus(OK)
+    public Page<CategoryDto> findByPage(
         @RequestParam(value = "page", defaultValue = "0") Integer page,
         @RequestParam(value = "size", defaultValue = "24") Integer size,
         @RequestParam(value = "direction", defaultValue = "ASC") String direction,
         @RequestParam(value = "properties", defaultValue = "name") String properties) {
-        Page<CategoryDto> list = service.findByPage(page, size, direction, properties);
-        return ok().body(list);
+        return service.findByPage(page, size, direction, properties);
     }
 
     @ApiOperation(value = "Persist a Category Entity")
     @PostMapping
     public ResponseEntity<Category> save(@Valid @RequestBody CategoryDto dto) {
-        List<Category> object = service.save(dto);
-
-        if (object != null) {
-            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(object.get(0).getId()).toUri();
-            return created(uri).build();
-        } else {
-            return badRequest().build();
-        }
+        Category object = service.save(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(object.getId()).toUri();
+        return created(uri).build();
     }
 
     @ApiOperation(value = "Updates an existing Category Entity")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody CategoryDto dto) {
+    @ResponseStatus(NO_CONTENT)
+    public void update(@PathVariable Long id, @Valid @RequestBody CategoryDto dto) {
         service.update(id, dto);
-        return noContent().build();
     }
 
     @ApiOperation(value = "Deletes a specific Category Entity")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @ResponseStatus(NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return noContent().build();
     }
 }

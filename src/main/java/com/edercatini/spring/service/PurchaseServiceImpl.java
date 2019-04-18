@@ -44,9 +44,10 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public List<Purchase> save(PurchaseDto dto) {
+    public Purchase save(PurchaseDto dto) {
         Purchase object = new Purchase(dto.getRegisteredIn(), dto.getDeliveryAddress(), dto.getCustomer());
-        return repository.saveAll(asList(object));
+        repository.saveAll(asList(object));
+        return object;
     }
 
     @Override

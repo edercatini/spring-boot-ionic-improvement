@@ -92,7 +92,7 @@ public class PurchaseControllerTest {
         Purchase object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        given(service.save(any())).willReturn(new ArrayList<>(asList(object)));
+        given(service.save(any())).willReturn(object);
 
         mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
             .content(json)

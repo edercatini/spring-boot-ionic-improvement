@@ -14,7 +14,7 @@ public interface CustomerService {
 
     Page<CustomerDto> findByPage(Integer page, Integer size, String direction, String properties);
 
-    List<Customer> save(CustomerDto dto);
+    Customer save(CustomerDto dto);
 
     void update(Long id, CustomerDto dto);
 

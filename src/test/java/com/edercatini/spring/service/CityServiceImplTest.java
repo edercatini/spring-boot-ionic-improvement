@@ -93,9 +93,9 @@ public class CityServiceImplTest {
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
         CityDto dto = dto().build();
-        List<City> object = service.save(dto);
-        assertTrue(object.get(0) instanceof City);
-        assertThat(object.get(0).getName(), is(equalTo(OBJECT_NAME)));
+        City object = service.save(dto);
+        assertTrue(object instanceof City);
+        assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test

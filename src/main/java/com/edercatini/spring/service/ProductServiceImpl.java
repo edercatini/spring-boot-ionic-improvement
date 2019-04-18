@@ -44,9 +44,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> save(ProductDto dto) {
+    public Product save(ProductDto dto) {
         Product object = new Product(dto.getName(), dto.getPrice());
-        return repository.saveAll(asList(object));
+        repository.saveAll(asList(object));
+        return object;
     }
 
     @Override

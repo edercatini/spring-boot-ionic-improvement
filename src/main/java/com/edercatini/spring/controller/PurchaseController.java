@@ -14,7 +14,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.ResponseEntity.created;
 
 @RestController
 @RequestMapping("/purchase")
@@ -30,53 +32,48 @@ public class PurchaseController {
 
     @ApiOperation(value = "Searches for a specific Purchase by its ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Purchase> findById(@PathVariable Long id) {
-        Purchase object = service.findById(id);
-        return ok().body(object);
+    @ResponseStatus(OK)
+    public Purchase findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @ApiOperation(value = "Returns a complete set of Purchases")
     @GetMapping
-    public ResponseEntity<List<Purchase>> findAll() {
-        List<Purchase> objects = service.findAll();
-        return ok().body(objects);
+    @ResponseStatus(OK)
+    public List<Purchase> findAll() {
+        return service.findAll();
     }
 
     @ApiOperation(value = "Returns a complete set of Purchases with paginated data")
     @GetMapping(value = "/page")
-    public ResponseEntity<Page<PurchaseDto>> findByPage(
+    @ResponseStatus(OK)
+    public Page<PurchaseDto> findByPage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "24") Integer size,
             @RequestParam(value = "direction", defaultValue = "ASC") String direction,
             @RequestParam(value = "properties", defaultValue = "name") String properties) {
-        Page<PurchaseDto> list = service.findByPage(page, size, direction, properties);
-        return ok().body(list);
+        return service.findByPage(page, size, direction, properties);
     }
 
     @ApiOperation(value = "Persist a Purchase Entity")
     @PostMapping
     public ResponseEntity<Purchase> save(@Valid @RequestBody PurchaseDto dto) {
-        List<Purchase> object = service.save(dto);
-
-        if (object != null) {
-            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(object.get(0).getId()).toUri();
-            return created(uri).build();
-        } else {
-            return badRequest().build();
-        }
+        Purchase object = service.save(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(object.getId()).toUri();
+        return created(uri).build();
     }
 
     @ApiOperation(value = "Updates an existing Purchase Entity")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody PurchaseDto dto) {
+    @ResponseStatus(NO_CONTENT)
+    public void update(@PathVariable Long id, @Valid @RequestBody PurchaseDto dto) {
         service.update(id, dto);
-        return noContent().build();
     }
 
     @ApiOperation(value = "Deletes a specific Purchase Entity")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @ResponseStatus(NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return noContent().build();
     }
 }
