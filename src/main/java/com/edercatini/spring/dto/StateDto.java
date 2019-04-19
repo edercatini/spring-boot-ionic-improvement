@@ -1,5 +1,6 @@
 package com.edercatini.spring.dto;
 
+import com.edercatini.spring.model.State;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StateDto implements Serializable {
+public class StateDto implements Serializable, DTO {
 
     private static final long serialVersionUID = -6885090840185178628L;
 
@@ -20,4 +21,10 @@ public class StateDto implements Serializable {
     @NotEmpty
     @Size(min = 4, max = 60, message = "Nome deve conter entre {min} e {max} caracteres")
     private String name;
+
+    @Override
+    public Object parseToObject(Object dto) {
+        StateDto reference = (StateDto) dto;
+        return new State(reference.getName());
+    }
 }

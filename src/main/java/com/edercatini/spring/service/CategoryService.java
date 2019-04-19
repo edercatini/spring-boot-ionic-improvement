@@ -1,22 +1,17 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Category;
-import com.edercatini.spring.dto.CategoryDto;
-import org.springframework.data.domain.Page;
+import com.edercatini.spring.model.Category;
+import com.edercatini.spring.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class CategoryService extends AbstractService<Category> {
 
-public interface CategoryService {
+    private CategoryRepository repository;
 
-    Category findById(Long id);
-
-    List<Category> findAll();
-
-    Page<CategoryDto> findByPage(Integer page, Integer size, String direction, String properties);
-
-    Category save(CategoryDto dto);
-
-    void update(Long id, CategoryDto dto);
-
-    void delete(Long id);
+    @Autowired
+    public CategoryService(CategoryRepository repository) {
+        super(repository);
+    }
 }

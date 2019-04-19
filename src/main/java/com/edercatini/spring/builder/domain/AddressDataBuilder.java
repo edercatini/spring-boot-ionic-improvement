@@ -1,7 +1,7 @@
 package com.edercatini.spring.builder.domain;
 
-import com.edercatini.spring.domain.Address;
-import com.edercatini.spring.domain.Customer;
+import com.edercatini.spring.model.Address;
+import com.edercatini.spring.model.Customer;
 
 public class AddressDataBuilder {
 

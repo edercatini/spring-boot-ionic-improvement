@@ -1,6 +1,6 @@
 package com.edercatini.spring.builder.domain;
 
-import com.edercatini.spring.domain.Product;
+import com.edercatini.spring.model.Product;
 
 public class ProductDataBuilder {
 

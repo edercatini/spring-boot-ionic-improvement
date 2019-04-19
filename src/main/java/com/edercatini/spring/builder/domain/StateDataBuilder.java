@@ -1,6 +1,6 @@
 package com.edercatini.spring.builder.domain;
 
-import com.edercatini.spring.domain.State;
+import com.edercatini.spring.model.State;
 
 public class StateDataBuilder {
 

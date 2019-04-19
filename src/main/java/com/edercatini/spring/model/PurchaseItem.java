@@ -1,4 +1,4 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

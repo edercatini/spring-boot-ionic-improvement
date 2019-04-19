@@ -1,22 +1,17 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.City;
-import com.edercatini.spring.dto.CityDto;
-import org.springframework.data.domain.Page;
+import com.edercatini.spring.model.City;
+import com.edercatini.spring.repository.CityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class CityService extends AbstractService<City> {
 
-public interface CityService {
+    private CityRepository repository;
 
-    City findById(Long id);
-
-    List<City> findAll();
-
-    Page<CityDto> findByPage(Integer page, Integer size, String direction, String properties);
-
-    City save(CityDto dto);
-
-    void update(Long id, CityDto dto);
-
-    void delete(Long id);
+    @Autowired
+    public CityService(CityRepository repository) {
+        super(repository);
+    }
 }

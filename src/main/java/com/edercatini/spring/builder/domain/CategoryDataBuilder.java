@@ -1,6 +1,6 @@
 package com.edercatini.spring.builder.domain;
 
-import com.edercatini.spring.domain.Category;
+import com.edercatini.spring.model.Category;
 
 public class CategoryDataBuilder {
 

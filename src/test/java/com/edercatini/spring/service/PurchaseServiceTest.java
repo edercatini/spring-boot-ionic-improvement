@@ -1,9 +1,10 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Customer;
-import com.edercatini.spring.domain.Purchase;
-import com.edercatini.spring.dto.PurchaseDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
+import com.edercatini.spring.model.CustomResponse;
+import com.edercatini.spring.model.Customer;
+import com.edercatini.spring.model.MultipleCustomResponse;
+import com.edercatini.spring.model.Purchase;
 import com.edercatini.spring.repository.PurchaseRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,11 +17,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static com.edercatini.spring.builder.domain.PurchaseDataBuilder.anObject;
-import static com.edercatini.spring.builder.dto.PurchaseDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -35,7 +34,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PurchaseServiceImplTest {
+public class PurchaseServiceTest {
 
     private static final String CUSTOMER_NAME = "Customer";
     private static final Long PARAM_ID = 1L;
@@ -59,31 +58,21 @@ public class PurchaseServiceImplTest {
         customer.setName(CUSTOMER_NAME);
 
         given(repository.findById(anyLong())).willReturn(of(anObject().withCustomer(customer).build()));
-        Purchase object = service.findById(PARAM_ID);
-        assertThat(object.getCustomer().getName(), is(equalTo(CUSTOMER_NAME)));
+        CustomResponse<Purchase> object = service.findById(PARAM_ID);
+        assertThat(object.getEntity().getCustomer().getName(), is(equalTo(CUSTOMER_NAME)));
     }
 
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotFindById() {
         doReturn(empty()).when(repository).findById(anyLong());
-        Purchase object = service.findById(PARAM_ID);
+        service.findById(PARAM_ID);
     }
 
-    @Test
-    public void mustFindAllObjects() {
-        Customer customer = new Customer();
-        customer.setName(CUSTOMER_NAME);
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(anObject().withCustomer(customer).build())));
-
-        List<Purchase> categories = service.findAll();
-        assertThat(categories.get(0).getCustomer().getName(), is(equalTo(CUSTOMER_NAME)));
-    }
-
-    @Test
+    @Test(expected = ObjectNotFoundException.class)
     public void mustNotFindAnyObject() {
         given(repository.findAll()).willReturn(new ArrayList<>());
-        List<Purchase> objects = service.findAll();
-        assertThat(objects.size(), is(equalTo(NO_ELEMENTS)));
+        MultipleCustomResponse objects = service.findAll();
+        assertThat(objects.getEntities().size(), is(equalTo(NO_ELEMENTS)));
     }
 
     @Test
@@ -93,7 +82,7 @@ public class PurchaseServiceImplTest {
         given(repository.findAll(any(PageRequest.class)))
             .willReturn(new PageImpl<>(asList(anObject().build(), anObject().withCustomer(customer).build())));
 
-        Page<PurchaseDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
+        Page<Purchase> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
         assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
         assertThat(TOTAL_PAGES, is(equalTo(objects.getTotalPages())));
     }
@@ -103,11 +92,9 @@ public class PurchaseServiceImplTest {
         Customer customer = new Customer();
         customer.setName(CUSTOMER_NAME);
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().withCustomer(customer).build())));
-
-        PurchaseDto dto = dto().withCustomer(customer).build();
-        Purchase object = service.save(dto);
-        assertTrue(object instanceof Purchase);
-        assertThat(object.getCustomer().getName(), is(equalTo(CUSTOMER_NAME)));
+        CustomResponse<Purchase> object = service.save(anObject().withCustomer(customer).build());
+        assertTrue(object.getEntity() instanceof Purchase);
+        assertThat(object.getEntity().getCustomer().getName(), is(equalTo(CUSTOMER_NAME)));
     }
 
     @Test
@@ -117,16 +104,10 @@ public class PurchaseServiceImplTest {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().withCustomer(customer).build())));
         given(repository.findById(anyLong())).willReturn(Optional.of(new Purchase()));
 
-        service.update(PARAM_ID, dto().build());
+        service.update(anObject().build());
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
-    }
-
-    @Test(expected = ObjectNotFoundException.class)
-    public void mustNotUpdateAnObjectDueToInvalidId() {
-        given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, dto().build());
     }
 
     @Test

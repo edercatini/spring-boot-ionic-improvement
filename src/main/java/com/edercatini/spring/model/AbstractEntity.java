@@ -1,4 +1,4 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
 import lombok.Data;
 
@@ -10,10 +10,10 @@ import java.io.Serializable;
 
 @Data
 @MappedSuperclass
-public abstract class AbstractEntity<T extends Serializable> implements Serializable {
+public abstract class AbstractEntity implements Serializable, Entity<Long> {
     private static final long serialVersionUID = -2036939753416081965L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private T id;
+    private Long id;
 }

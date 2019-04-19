@@ -1,6 +1,6 @@
 package com.edercatini.spring.builder.domain;
 
-import com.edercatini.spring.domain.Customer;
+import com.edercatini.spring.model.Customer;
 import com.edercatini.spring.enums.CustomerTypes;
 
 import static com.edercatini.spring.enums.CustomerTypes.toEnum;

@@ -1,6 +1,6 @@
 package com.edercatini.spring.repository;
 
-import com.edercatini.spring.domain.City;
+import com.edercatini.spring.model.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

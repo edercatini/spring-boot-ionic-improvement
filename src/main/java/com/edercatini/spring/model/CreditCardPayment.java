@@ -1,4 +1,4 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
 import com.edercatini.spring.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -28,5 +28,10 @@ public class CreditCardPayment extends Payment implements Serializable {
         super(paymentStatus);
         this.numberOfBills = numberOfBills;
         this.setPurchase(purchase);
+    }
+
+    @Override
+    public Object parseToDto(Object object) {
+        return null;
     }
 }

@@ -1,22 +1,17 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Address;
-import com.edercatini.spring.dto.AddressDto;
-import org.springframework.data.domain.Page;
+import com.edercatini.spring.model.Address;
+import com.edercatini.spring.repository.AddressRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class AddressService extends AbstractService<Address> {
 
-public interface AddressService {
+    private AddressRepository repository;
 
-    Address findById(Long id);
-
-    List<Address> findAll();
-
-    Page<AddressDto> findByPage(Integer page, Integer size, String direction, String properties);
-
-    Address save(AddressDto dto);
-
-    void update(Long id, AddressDto dto);
-
-    void delete(Long id);
+    @Autowired
+    public AddressService(AddressRepository repository) {
+        super(repository);
+    }
 }

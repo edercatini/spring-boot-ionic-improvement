@@ -1,9 +1,10 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Address;
-import com.edercatini.spring.dto.AddressDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
-import com.edercatini.spring.repository.AddressRepository;
+import com.edercatini.spring.model.CustomResponse;
+import com.edercatini.spring.model.MultipleCustomResponse;
+import com.edercatini.spring.model.State;
+import com.edercatini.spring.repository.StateRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static com.edercatini.spring.builder.domain.AddressDataBuilder.anObject;
-import static com.edercatini.spring.builder.dto.AddressDtoDataBuilder.dto;
+import static com.edercatini.spring.builder.domain.StateDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -34,9 +33,9 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AddressServiceImplTest {
+public class StateServiceTest {
 
-    private static final String OBJECT_PUBLIC_PLACE = "Test";
+    private static final String OBJECT_NAME = "State";
     private static final Long PARAM_ID = 1L;
     private static final Integer NO_ELEMENTS = 0;
     private static final Integer PAGE = 0;
@@ -47,36 +46,29 @@ public class AddressServiceImplTest {
     private static final Long TOTAL_ELEMENTS = 2L;
 
     @MockBean
-    private AddressRepository repository;
+    private StateRepository repository;
 
     @Autowired
-    private AddressService service;
+    private StateService service;
 
     @Test
     public void mustFindById() {
         given(repository.findById(anyLong())).willReturn(of(anObject().build()));
-        Address object = service.findById(PARAM_ID);
-        assertThat(object.getPublicPlace(), is(equalTo(OBJECT_PUBLIC_PLACE)));
+        CustomResponse<State> object = service.findById(PARAM_ID);
+        assertThat(object.getEntity().getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotFindById() {
         doReturn(empty()).when(repository).findById(anyLong());
-        Address object = service.findById(PARAM_ID);
+        service.findById(PARAM_ID);
     }
 
-    @Test
-    public void mustFindAllObjects() {
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(anObject().build())));
-        List<Address> categories = service.findAll();
-        assertThat(categories.get(0).getPublicPlace(), is(equalTo(OBJECT_PUBLIC_PLACE)));
-    }
-
-    @Test
+    @Test(expected = ObjectNotFoundException.class)
     public void mustNotFindAnyObject() {
         given(repository.findAll()).willReturn(new ArrayList<>());
-        List<Address> objects = service.findAll();
-        assertThat(objects.size(), is(equalTo(NO_ELEMENTS)));
+        MultipleCustomResponse categories = service.findAll();
+        assertThat(categories.getEntities().size(), is(equalTo(NO_ELEMENTS)));
     }
 
     @Test
@@ -84,7 +76,7 @@ public class AddressServiceImplTest {
         given(repository.findAll(any(PageRequest.class)))
             .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
-        Page<AddressDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
+        Page<State> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
         assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
         assertThat(TOTAL_PAGES, is(equalTo(objects.getTotalPages())));
     }
@@ -92,27 +84,20 @@ public class AddressServiceImplTest {
     @Test
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
-        AddressDto dto = dto().build();
-        Address object = service.save(dto);
-        assertTrue(object instanceof Address);
-        assertThat(object.getPublicPlace(), is(equalTo(OBJECT_PUBLIC_PLACE)));
+        CustomResponse<State> object = service.save(anObject().build());
+        assertTrue(object.getEntity() instanceof State);
+        assertThat(object.getEntity().getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test
     public void mustUpdateAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
-        given(repository.findById(anyLong())).willReturn(Optional.of(new Address()));
+        given(repository.findById(anyLong())).willReturn(Optional.of(new State()));
 
-        service.update(PARAM_ID, dto().build());
+        service.update(anObject().build());
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
-    }
-
-    @Test(expected = ObjectNotFoundException.class)
-    public void mustNotUpdateAnObjectDueToInvalidId() {
-        given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, dto().build());
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.edercatini.spring.repository;
 
-import com.edercatini.spring.domain.City;
+import com.edercatini.spring.model.City;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

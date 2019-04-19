@@ -1,5 +1,6 @@
 package com.edercatini.spring.dto;
 
+import com.edercatini.spring.model.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,12 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.edercatini.spring.enums.CustomerTypes.toEnum;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDto implements Serializable {
+public class CustomerDto implements Serializable, DTO {
 
     private static final long serialVersionUID = -6885090840185178628L;
 
@@ -35,4 +38,10 @@ public class CustomerDto implements Serializable {
 
     @NotNull
     private Set<String> phones = new HashSet<>();
+
+    @Override
+    public Object parseToObject(Object dto) {
+        CustomerDto reference = (CustomerDto) dto;
+        return new Customer(reference.getName(), reference.getMail(), reference.getDocument(), toEnum(reference.getType()));
+    }
 }

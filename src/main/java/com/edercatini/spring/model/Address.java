@@ -1,5 +1,6 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
+import com.edercatini.spring.dto.AddressDto;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-public class Address extends AbstractEntity<Long> implements Serializable {
+public class Address extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1636590043603307268L;
 
@@ -47,5 +48,24 @@ public class Address extends AbstractEntity<Long> implements Serializable {
         this.postalCode = postalCode;
         this.customer = customer;
         this.city = city;
+    }
+
+    @Override
+    public Object parseToDto(Object object) {
+        Address reference = (Address) object;
+
+        return new AddressDto(reference.getPublicPlace(), reference.getNumber(), reference.getComplement(),
+            reference.getNeighborhood(), reference.getPostalCode(), reference.getCustomer());
+    }
+
+    public Address updateByDTO(Address reference, AddressDto dto) {
+        reference.setPublicPlace(dto.getPublicPlace());
+        reference.setNumber(dto.getNumber());
+        reference.setComplement(dto.getComplement());
+        reference.setNeighborhood(dto.getNeighborhood());
+        reference.setPostalCode(dto.getPostalCode());
+        reference.setCustomer(dto.getCustomer());
+
+        return reference;
     }
 }

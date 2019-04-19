@@ -1,6 +1,8 @@
 package com.edercatini.spring.controller;
 
-import com.edercatini.spring.domain.Purchase;
+import com.edercatini.spring.model.CustomResponse;
+import com.edercatini.spring.model.MultipleCustomResponse;
+import com.edercatini.spring.model.Purchase;
 import com.edercatini.spring.service.PurchaseService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -10,20 +12,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.edercatini.spring.builder.domain.PurchaseDataBuilder.anObject;
-import static com.edercatini.spring.builder.dto.PurchaseDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,7 +34,6 @@ public class PurchaseControllerTest {
     private static final String API_BASE_URL = "/" + ENTITY;
     private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
-    private static final String INVALID_REQUEST_BODY = "invalid";
     private static final String API_PAGE_URL = "/" + ENTITY + "/page";
     private static final Integer TOTAL_PAGES = 1;
     private static final Integer TOTAL_ELEMENTS = 2;
@@ -49,32 +46,37 @@ public class PurchaseControllerTest {
 
     @Test
     public void mustFindById() throws Exception {
-        given(service.findById(anyLong())).willReturn(anObject().build());
+        CustomResponse<Purchase> response = new CustomResponse<>();
+        response.setEntity(anObject().build());
+        given(service.findById(anyLong())).willReturn(response);
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isOk());
     }
 
     @Test
     public void mustFindAll() throws Exception {
-        List<Purchase> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
-        given(service.findAll()).willReturn(new ArrayList<>(objects));
+        CustomResponse<Purchase> customResponse = new CustomResponse<>();
+        customResponse.setEntity(anObject().build());
+
+        MultipleCustomResponse response = new MultipleCustomResponse();
+        response.setEntities(asList(customResponse));
+
+        given(service.findAll()).willReturn(response);
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isOk());
     }
 
     @Test
     public void mustFindByPage() throws Exception {
-        List<Purchase> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
-
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
-            .willReturn(new PageImpl<>(asList(dto().build(), dto().build())));
+            .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
         mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.totalPages").value(TOTAL_PAGES))
             .andExpect(jsonPath("$.totalElements").value(TOTAL_ELEMENTS));
@@ -83,7 +85,7 @@ public class PurchaseControllerTest {
     @Test
     public void mustReturnHttp404IfEndpointDoesNotExist() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get(INVALID_ENDPOINT)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
 
@@ -92,26 +94,12 @@ public class PurchaseControllerTest {
         Purchase object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        given(service.save(any())).willReturn(object);
 
         mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
             .content(json)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON))
             .andExpect(status().isCreated());
-    }
-
-    @Test
-    public void mustNotSaveDueToInvalidRequestBody() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(INVALID_REQUEST_BODY);
-        given(service.save(any())).willReturn(null);
-
-        mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -119,12 +107,17 @@ public class PurchaseControllerTest {
         Purchase object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        doNothing().when(service).update(anyLong(), any());
+
+        CustomResponse response = new CustomResponse();
+        response.setEntity(anObject().build());
+
+        given(service.findById(anyLong())).willReturn(response);
+        doNothing().when(service).update(any());
 
         mvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + ENDPOINT_ID_PARAM)
             .content(json)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON))
             .andExpect(status().isNoContent());
     }
 
@@ -133,7 +126,7 @@ public class PurchaseControllerTest {
         doNothing().when(service).delete(anyLong());
 
         mvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + ENDPOINT_ID_PARAM)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isNoContent());
     }
 }

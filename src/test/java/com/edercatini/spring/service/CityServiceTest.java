@@ -1,9 +1,10 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Category;
-import com.edercatini.spring.dto.CategoryDto;
 import com.edercatini.spring.exception.ObjectNotFoundException;
-import com.edercatini.spring.repository.CategoryRepository;
+import com.edercatini.spring.model.City;
+import com.edercatini.spring.model.CustomResponse;
+import com.edercatini.spring.model.MultipleCustomResponse;
+import com.edercatini.spring.repository.CityRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static com.edercatini.spring.builder.domain.CategoryDataBuilder.anObject;
-import static com.edercatini.spring.builder.dto.CategoryDtoDataBuilder.dto;
+import static com.edercatini.spring.builder.domain.CityDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -34,9 +33,9 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CategoryServiceImplTest {
+public class CityServiceTest {
 
-    private static final String OBJECT_NAME = "Category";
+    private static final String OBJECT_NAME = "City";
     private static final Long PARAM_ID = 1L;
     private static final Integer NO_ELEMENTS = 0;
     private static final Integer PAGE = 0;
@@ -47,36 +46,29 @@ public class CategoryServiceImplTest {
     private static final Long TOTAL_ELEMENTS = 2L;
 
     @MockBean
-    private CategoryRepository repository;
+    private CityRepository repository;
 
     @Autowired
-    private CategoryService service;
+    private CityService service;
 
     @Test
     public void mustFindById() {
         given(repository.findById(anyLong())).willReturn(of(anObject().build()));
-        Category object = service.findById(PARAM_ID);
-        assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
+        CustomResponse<City> object = service.findById(PARAM_ID);
+        assertThat(object.getEntity().getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test(expected = ObjectNotFoundException.class)
     public void mustNotFindById() {
         doReturn(empty()).when(repository).findById(anyLong());
-        Category object = service.findById(PARAM_ID);
+        service.findById(PARAM_ID);
     }
 
-    @Test
-    public void mustFindAllObjects() {
-        given(repository.findAll()).willReturn(new ArrayList<>(asList(anObject().build())));
-        List<Category> categories = service.findAll();
-        assertThat(categories.get(0).getName(), is(equalTo(OBJECT_NAME)));
-    }
-
-    @Test
+    @Test(expected = ObjectNotFoundException.class)
     public void mustNotFindAnyObject() {
         given(repository.findAll()).willReturn(new ArrayList<>());
-        List<Category> objects = service.findAll();
-        assertThat(objects.size(), is(equalTo(NO_ELEMENTS)));
+        MultipleCustomResponse categories = service.findAll();
+        assertThat(categories.getEntities().size(), is(equalTo(NO_ELEMENTS)));
     }
 
     @Test
@@ -84,7 +76,7 @@ public class CategoryServiceImplTest {
         given(repository.findAll(any(PageRequest.class)))
             .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
-        Page<CategoryDto> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
+        Page<City> objects = service.findByPage(PAGE, SIZE, DIRECTION, PROPERTIES);
         assertThat(TOTAL_ELEMENTS, is(equalTo(objects.getTotalElements())));
         assertThat(TOTAL_PAGES, is(equalTo(objects.getTotalPages())));
     }
@@ -92,27 +84,20 @@ public class CategoryServiceImplTest {
     @Test
     public void mustSaveAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
-        CategoryDto dto = dto().build();
-        Category object = service.save(dto);
-        assertTrue(object instanceof Category);
-        assertThat(object.getName(), is(equalTo(OBJECT_NAME)));
+        CustomResponse<City> object = service.save(anObject().build());
+        assertTrue(object.getEntity() instanceof City);
+        assertThat(object.getEntity().getName(), is(equalTo(OBJECT_NAME)));
     }
 
     @Test
     public void mustUpdateAnObject() {
         given(repository.saveAll(anyList())).willReturn(new ArrayList<>(asList(anObject().build())));
-        given(repository.findById(anyLong())).willReturn(Optional.of(new Category()));
+        given(repository.findById(anyLong())).willReturn(Optional.of(new City()));
 
-        service.update(PARAM_ID, dto().build());
+        service.update(anObject().build());
 
         verify(repository, atMost(1)).findById(anyLong());
         verify(repository, atMost(1)).saveAll(anyList());
-    }
-
-    @Test(expected = ObjectNotFoundException.class)
-    public void mustNotUpdateAnObjectDueToInvalidId() {
-        given(repository.findById(anyLong())).willReturn(Optional.empty());
-        service.update(PARAM_ID, dto().build());
     }
 
     @Test

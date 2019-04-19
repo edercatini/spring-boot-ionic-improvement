@@ -1,22 +1,17 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Customer;
-import com.edercatini.spring.dto.CustomerDto;
-import org.springframework.data.domain.Page;
+import com.edercatini.spring.model.Customer;
+import com.edercatini.spring.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class CustomerService extends AbstractService<Customer> {
 
-public interface CustomerService {
+    private CustomerRepository repository;
 
-    Customer findById(Long id);
-
-    List<Customer> findAll();
-
-    Page<CustomerDto> findByPage(Integer page, Integer size, String direction, String properties);
-
-    Customer save(CustomerDto dto);
-
-    void update(Long id, CustomerDto dto);
-
-    void delete(Long id);
+    @Autowired
+    public CustomerService(CustomerRepository repository) {
+        super(repository);
+    }
 }

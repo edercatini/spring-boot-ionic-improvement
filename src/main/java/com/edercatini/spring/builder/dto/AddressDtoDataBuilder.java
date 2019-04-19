@@ -1,6 +1,6 @@
 package com.edercatini.spring.builder.dto;
 
-import com.edercatini.spring.domain.Customer;
+import com.edercatini.spring.model.Customer;
 import com.edercatini.spring.dto.AddressDto;
 
 public class AddressDtoDataBuilder {

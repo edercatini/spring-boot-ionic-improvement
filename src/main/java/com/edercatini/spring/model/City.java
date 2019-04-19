@@ -1,5 +1,6 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
+import com.edercatini.spring.dto.CityDto;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-public class City extends AbstractEntity<Long> implements Serializable {
+public class City extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 4529888219276554536L;
 
@@ -29,5 +30,16 @@ public class City extends AbstractEntity<Long> implements Serializable {
     public City(String name, State state) {
         this.name = name;
         this.state = state;
+    }
+
+    @Override
+    public Object parseToDto(Object object) {
+        City reference = (City) object;
+        return new CityDto(reference.getName());
+    }
+
+    public City updateByDTO(City reference, CityDto dto) {
+        reference.setName(dto.getName());
+        return reference;
     }
 }

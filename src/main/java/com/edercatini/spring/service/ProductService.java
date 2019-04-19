@@ -1,22 +1,17 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.domain.Product;
-import com.edercatini.spring.dto.ProductDto;
-import org.springframework.data.domain.Page;
+import com.edercatini.spring.model.Product;
+import com.edercatini.spring.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class ProductService extends AbstractService<Product> {
 
-public interface ProductService {
+    private ProductRepository repository;
 
-    Product findById(Long id);
-
-    List<Product> findAll();
-
-    Page<ProductDto> findByPage(Integer page, Integer size, String direction, String properties);
-
-    Product save(ProductDto dtu);
-
-    void update(Long id, ProductDto dto);
-
-    void delete(Long id);
+    @Autowired
+    public ProductService(ProductRepository repository) {
+        super(repository);
+    }
 }

@@ -1,12 +1,12 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
 import com.edercatini.spring.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
+import javax.persistence.Entity;
 import javax.persistence.*;
-
 import java.io.Serializable;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
@@ -17,7 +17,7 @@ import static javax.persistence.InheritanceType.JOINED;
 @Inheritance(strategy = JOINED)
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "@type")
 @Data
-public abstract class Payment extends AbstractEntity<Long> implements Serializable {
+public abstract class Payment extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 4649437255271824370L;
 

@@ -1,8 +1,10 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
+import com.edercatini.spring.dto.ProductDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.persistence.Entity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Product extends AbstractEntity<Long> {
+public class Product extends AbstractEntity {
 
     private String name;
     private Double price;
@@ -42,5 +44,17 @@ public class Product extends AbstractEntity<Long> {
         }
 
         return lista;
+    }
+
+    @Override
+    public Object parseToDto(Object object) {
+        Product reference = (Product) object;
+        return new ProductDto(reference.getName(), reference.getPrice());
+    }
+
+    public Product updateByDTO(Product reference, ProductDto dto) {
+        reference.setName(dto.getName());
+        reference.setPrice(dto.getPrice());
+        return reference;
     }
 }

@@ -1,6 +1,8 @@
 package com.edercatini.spring.controller;
 
-import com.edercatini.spring.domain.Address;
+import com.edercatini.spring.model.Address;
+import com.edercatini.spring.model.CustomResponse;
+import com.edercatini.spring.model.MultipleCustomResponse;
 import com.edercatini.spring.service.AddressService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -10,20 +12,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.edercatini.spring.builder.domain.AddressDataBuilder.anObject;
-import static com.edercatini.spring.builder.dto.AddressDtoDataBuilder.dto;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +35,6 @@ public class AddressControllerTest {
     private static final String API_BASE_URL = "/" + ENTITY;
     private static final String INVALID_ENDPOINT = "/api/" + ENTITY;
     private static final String ENDPOINT_ID_PARAM = "/1";
-    private static final String INVALID_REQUEST_BODY = "invalid";
     private static final String API_PAGE_URL = "/" + ENTITY + "/page";
     private static final Integer TOTAL_PAGES = 1;
     private static final Integer TOTAL_ELEMENTS = 2;
@@ -50,35 +47,39 @@ public class AddressControllerTest {
 
     @Test
     public void mustFindById() throws Exception {
-        given(service.findById(anyLong())).willReturn(anObject().build());
+        CustomResponse<Address> response = new CustomResponse<>();
+        response.setEntity(anObject().build());
+        given(service.findById(anyLong())).willReturn(response);
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.publicPlace").value(OBJECT_PUBLIC_PLACE));
+            .andExpect(jsonPath("$.entity.publicPlace").value(OBJECT_PUBLIC_PLACE));
     }
 
     @Test
     public void mustFindAll() throws Exception {
-        List<Address> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
-        given(service.findAll()).willReturn(new ArrayList<>(objects));
+        CustomResponse<Address> customResponse = new CustomResponse<>();
+        customResponse.setEntity(anObject().build());
+
+        MultipleCustomResponse response = new MultipleCustomResponse();
+        response.setEntities(asList(customResponse));
+
+        given(service.findAll()).willReturn(response);
 
         mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].publicPlace").value(OBJECT_PUBLIC_PLACE))
-            .andExpect(jsonPath("$[1].publicPlace").value(OBJECT_PUBLIC_PLACE));
+            .andExpect(jsonPath("$.entities[0].entity.publicPlace").value(OBJECT_PUBLIC_PLACE));
     }
 
     @Test
     public void mustFindByPage() throws Exception {
-        List<Address> objects = new ArrayList<>(asList(anObject().build(), anObject().build()));
-
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
-            .willReturn(new PageImpl<>(asList(dto().build(), dto().build())));
+            .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
         mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content[0].publicPlace").value(OBJECT_PUBLIC_PLACE))
             .andExpect(jsonPath("$.content[1].publicPlace").value(OBJECT_PUBLIC_PLACE))
@@ -89,7 +90,7 @@ public class AddressControllerTest {
     @Test
     public void mustReturnHttp404IfEndpointDoesNotExist() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get(INVALID_ENDPOINT)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
 
@@ -98,26 +99,12 @@ public class AddressControllerTest {
         Address object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        given(service.save(any())).willReturn(object);
 
         mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
             .content(json)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON))
             .andExpect(status().isCreated());
-    }
-
-    @Test
-    public void mustNotSaveDueToInvalidRequestBody() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(INVALID_REQUEST_BODY);
-        given(service.save(any())).willReturn(null);
-
-        mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -125,12 +112,17 @@ public class AddressControllerTest {
         Address object = anObject().build();
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        doNothing().when(service).update(anyLong(), any());
+
+        CustomResponse response = new CustomResponse();
+        response.setEntity(anObject().build());
+
+        given(service.findById(anyLong())).willReturn(response);
+        doNothing().when(service).update(any());
 
         mvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + ENDPOINT_ID_PARAM)
             .content(json)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+            .contentType(APPLICATION_JSON)
+            .accept(APPLICATION_JSON))
             .andExpect(status().isNoContent());
     }
 
@@ -139,7 +131,7 @@ public class AddressControllerTest {
         doNothing().when(service).delete(anyLong());
 
         mvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + ENDPOINT_ID_PARAM)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(APPLICATION_JSON))
             .andExpect(status().isNoContent());
     }
 }

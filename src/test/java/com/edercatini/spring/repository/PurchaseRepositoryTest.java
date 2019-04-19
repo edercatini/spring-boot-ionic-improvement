@@ -1,8 +1,8 @@
 package com.edercatini.spring.repository;
 
 import com.edercatini.spring.builder.domain.CustomerDataBuilder;
-import com.edercatini.spring.domain.Address;
-import com.edercatini.spring.domain.Customer;
+import com.edercatini.spring.model.Address;
+import com.edercatini.spring.model.Customer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

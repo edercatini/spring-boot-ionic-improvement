@@ -1,6 +1,6 @@
 package com.edercatini.spring.builder.domain;
 
-import com.edercatini.spring.domain.City;
+import com.edercatini.spring.model.City;
 
 public class CityDataBuilder {
 

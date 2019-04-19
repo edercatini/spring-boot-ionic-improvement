@@ -1,4 +1,4 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
 import com.edercatini.spring.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -36,5 +36,10 @@ public class BankSlipPayment extends Payment implements Serializable {
         this.dueDate = dueDate;
         this.paymentDate = paymentDate;
         this.setPurchase(purchase);
+    }
+
+    @Override
+    public Object parseToDto(Object object) {
+        return null;
     }
 }

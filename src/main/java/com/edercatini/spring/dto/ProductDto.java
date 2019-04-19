@@ -1,5 +1,6 @@
 package com.edercatini.spring.dto;
 
+import com.edercatini.spring.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto implements Serializable {
+public class ProductDto implements Serializable, DTO {
 
     private static final long serialVersionUID = -6885090840185178628L;
 
@@ -23,4 +24,10 @@ public class ProductDto implements Serializable {
 
     @NotNull
     private Double price;
+
+    @Override
+    public Object parseToObject(Object dto) {
+        ProductDto reference = (ProductDto) dto;
+        return new Product(reference.getName(), reference.getPrice());
+    }
 }

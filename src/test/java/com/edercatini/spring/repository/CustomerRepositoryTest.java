@@ -1,6 +1,6 @@
 package com.edercatini.spring.repository;
 
-import com.edercatini.spring.domain.Customer;
+import com.edercatini.spring.model.Customer;
 import com.edercatini.spring.enums.CustomerTypes;
 import org.junit.After;
 import org.junit.Before;

@@ -1,5 +1,6 @@
-package com.edercatini.spring.domain;
+package com.edercatini.spring.model;
 
+import com.edercatini.spring.dto.CustomerDto;
 import com.edercatini.spring.enums.CustomerTypes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -19,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data
-public class Customer extends AbstractEntity<Long> implements Serializable {
+public class Customer extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -1235205585871107822L;
 
@@ -47,5 +48,19 @@ public class Customer extends AbstractEntity<Long> implements Serializable {
         this.mail = mail;
         this.document = document;
         this.type = type.getId();
+    }
+
+    @Override
+    public Object parseToDto(Object object) {
+        Customer reference = (Customer) object;
+        return new CustomerDto(reference.getName(), reference.getMail(), reference.getDocument(), reference.getType(), reference.getPhones());
+    }
+
+    public Customer updateByDTO(Customer reference, CustomerDto dto) {
+        reference.setName(dto.getName());
+        reference.setMail(dto.getMail());
+        reference.setDocument(dto.getDocument());
+        reference.setType(dto.getType());
+        return reference;
     }
 }
