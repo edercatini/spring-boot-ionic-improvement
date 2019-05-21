@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.edercatini.spring.builder.domain.CustomerDataBuilder.anObject;
+import static com.edercatini.spring.dataBuilder.domain.CustomerDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

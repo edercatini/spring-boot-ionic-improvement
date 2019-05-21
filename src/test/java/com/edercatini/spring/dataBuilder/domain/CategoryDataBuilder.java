@@ -1,4 +1,4 @@
-package com.edercatini.spring.builder.domain;
+package com.edercatini.spring.dataBuilder.domain;
 
 import com.edercatini.spring.model.Category;
 

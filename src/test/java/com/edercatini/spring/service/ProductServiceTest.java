@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static com.edercatini.spring.builder.domain.ProductDataBuilder.anObject;
+import static com.edercatini.spring.dataBuilder.domain.ProductDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;

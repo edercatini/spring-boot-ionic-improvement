@@ -1,4 +1,4 @@
-package com.edercatini.spring.builder.dto;
+package com.edercatini.spring.dataBuilder.dto;
 
 import com.edercatini.spring.model.Customer;
 import com.edercatini.spring.dto.AddressDto;

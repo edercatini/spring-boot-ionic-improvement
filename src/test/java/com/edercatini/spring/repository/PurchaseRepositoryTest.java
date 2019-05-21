@@ -1,6 +1,6 @@
 package com.edercatini.spring.repository;
 
-import com.edercatini.spring.builder.domain.CustomerDataBuilder;
+import com.edercatini.spring.dataBuilder.domain.CustomerDataBuilder;
 import com.edercatini.spring.model.Address;
 import com.edercatini.spring.model.Customer;
 import org.junit.After;
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
-import static com.edercatini.spring.builder.domain.AddressDataBuilder.anObject;
+import static com.edercatini.spring.dataBuilder.domain.AddressDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

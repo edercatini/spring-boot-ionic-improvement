@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 
-import static com.edercatini.spring.builder.domain.CategoryDataBuilder.anObject;
+import static com.edercatini.spring.dataBuilder.domain.CategoryDataBuilder.anObject;
 import static com.edercatini.spring.utils.ResourceUtils.createUri;
 import static com.edercatini.spring.utils.ResourceUtils.setResponse;
 import static org.hamcrest.CoreMatchers.*;

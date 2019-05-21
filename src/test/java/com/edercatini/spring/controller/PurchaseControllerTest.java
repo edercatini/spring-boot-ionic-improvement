@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.edercatini.spring.builder.domain.PurchaseDataBuilder.anObject;
+import static com.edercatini.spring.dataBuilder.domain.PurchaseDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;

@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
-import static com.edercatini.spring.builder.domain.ProductDataBuilder.anObject;
+import static com.edercatini.spring.dataBuilder.domain.ProductDataBuilder.anObject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
