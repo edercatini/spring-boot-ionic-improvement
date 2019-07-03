@@ -6,14 +6,11 @@ import com.edercatini.spring.model.CustomResponse;
 import com.edercatini.spring.model.MultipleCustomResponse;
 import com.edercatini.spring.repository.CategoryRepository;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -31,9 +28,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class CategoryServiceTest {
+public class CategoryServiceTest extends ServiceTest {
 
     private static final String OBJECT_NAME = "Category";
     private static final Long PARAM_ID = 1L;

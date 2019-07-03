@@ -6,14 +6,8 @@ import com.edercatini.spring.model.Product;
 import com.edercatini.spring.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.edercatini.spring.dataBuilder.domain.ProductDataBuilder.anObject;
@@ -25,10 +19,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-public class ProductControllerTest {
+public class ProductControllerTest extends ControllerTest {
 
     private static final String ENTITY = "product";
     private static final String OBJECT_NAME = "Product";
@@ -40,9 +31,6 @@ public class ProductControllerTest {
     private static final Integer TOTAL_PAGES = 1;
     private static final Integer TOTAL_ELEMENTS = 2;
 
-    @Autowired
-    private MockMvc mvc;
-
     @MockBean
     private ProductService service;
 
@@ -52,7 +40,7 @@ public class ProductControllerTest {
         response.setEntity(anObject().build());
         given(service.findById(anyLong())).willReturn(response);
 
-        mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
+        super.mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.entity.name").value(OBJECT_NAME));
@@ -68,7 +56,7 @@ public class ProductControllerTest {
 
         given(service.findAll()).willReturn(response);
 
-        mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
+        super.mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
             .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.entities[0].entity.name").value(OBJECT_NAME))
@@ -80,7 +68,7 @@ public class ProductControllerTest {
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
             .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
 
-        mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
+        super.mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
             .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content[0].name").value(OBJECT_NAME))
@@ -93,7 +81,7 @@ public class ProductControllerTest {
 
     @Test
     public void mustReturnHttp404IfEndpointDoesNotExist() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get(INVALID_ENDPOINT)
+        super.mvc.perform(MockMvcRequestBuilders.get(INVALID_ENDPOINT)
             .accept(APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
@@ -104,7 +92,7 @@ public class ProductControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
 
-        mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
+        super.mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
             .content(json)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON))
@@ -123,7 +111,7 @@ public class ProductControllerTest {
         given(service.findById(anyLong())).willReturn(response);
         doNothing().when(service).update(any());
 
-        mvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + ENDPOINT_ID_PARAM)
+        super.mvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + ENDPOINT_ID_PARAM)
             .content(json)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON))
@@ -134,7 +122,7 @@ public class ProductControllerTest {
     public void mustDeleteAnObject() throws Exception {
         doNothing().when(service).delete(anyLong());
 
-        mvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + ENDPOINT_ID_PARAM)
+        super.mvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(APPLICATION_JSON))
             .andExpect(status().isNoContent());
     }
