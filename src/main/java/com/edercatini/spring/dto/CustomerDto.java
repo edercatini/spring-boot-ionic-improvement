@@ -1,11 +1,13 @@
 package com.edercatini.spring.dto;
 
 import com.edercatini.spring.model.Customer;
+import com.edercatini.spring.utils.CryptUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -39,9 +41,12 @@ public class CustomerDto implements Serializable, DTO {
     @NotNull
     private Set<String> phones = new HashSet<>();
 
+    @NotEmpty
+    private String password;
+
     @Override
     public Object parseToObject(Object dto) {
         CustomerDto reference = (CustomerDto) dto;
-        return new Customer(reference.getName(), reference.getMail(), reference.getDocument(), toEnum(reference.getType()));
+        return new Customer(reference.getName(), reference.getMail(), reference.getDocument(), toEnum(reference.getType()), CryptUtils.encrypt(reference.getPassword()));
     }
 }

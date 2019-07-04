@@ -2,6 +2,7 @@ package com.edercatini.spring.dataBuilder.dto;
 
 import com.edercatini.spring.dto.CustomerDto;
 import com.edercatini.spring.enums.CustomerTypes;
+import com.edercatini.spring.utils.CryptUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +15,7 @@ public class CustomerDtoDataBuilder {
     private static final String OBJECT_MAIL = "test@test.com";
     private static final String OBJECT_DOCUMENT = "9999999999";
     private static final Long OBJECT_TYPE = CustomerTypes.PHYSICAL_PERSON.getId();
+    private static final String OBJECT_PASSWORD = "test";
     private static final Set<String> PHONES = new HashSet<>();
 
     private CustomerDto entity;
@@ -23,7 +25,7 @@ public class CustomerDtoDataBuilder {
 
     public static CustomerDtoDataBuilder dto() {
         CustomerDtoDataBuilder builder = new CustomerDtoDataBuilder();
-        builder.entity = new CustomerDto(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE, PHONES);
+        builder.entity = new CustomerDto(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE, PHONES, CryptUtils.encrypt(OBJECT_PASSWORD));
         return builder;
     }
 
