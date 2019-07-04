@@ -2,6 +2,7 @@ package com.edercatini.spring.service;
 
 import com.edercatini.spring.model.*;
 import com.edercatini.spring.repository.*;
+import com.edercatini.spring.utils.CryptUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +106,7 @@ public class DatabaseService {
         stateRepository.saveAll(asList(est1, est2));
         cityRepository.saveAll(asList(c1, c2, c3));
 
-        Customer cli1 = new Customer("Maria Silva", "maria@gmail.com", "36378912377", PHYSICAL_PERSON);
+        Customer cli1 = new Customer("Maria Silva", "maria@gmail.com", "36378912377", PHYSICAL_PERSON, CryptUtils.encrypt("test"));
 
         cli1.getPhones().addAll(asList("27363323", "93838393"));
 

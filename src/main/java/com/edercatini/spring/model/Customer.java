@@ -2,6 +2,7 @@ package com.edercatini.spring.model;
 
 import com.edercatini.spring.dto.CustomerDto;
 import com.edercatini.spring.enums.CustomerTypes;
+import com.edercatini.spring.utils.CryptUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ public class Customer extends AbstractEntity implements Serializable {
     private String mail;
     private String document;
     private Long type;
+    private String password;
 
     @OneToMany(mappedBy = "customer", cascade = ALL, fetch = LAZY)
     private List<Address> addresses = new ArrayList<>();
@@ -43,17 +45,18 @@ public class Customer extends AbstractEntity implements Serializable {
     public Customer() {
     }
 
-    public Customer(String name, String mail, String document, CustomerTypes type) {
+    public Customer(String name, String mail, String document, CustomerTypes type, String password) {
         this.name = name;
         this.mail = mail;
         this.document = document;
         this.type = type.getId();
+        this.password = password;
     }
 
     @Override
     public Object parseToDto(Object object) {
         Customer reference = (Customer) object;
-        return new CustomerDto(reference.getName(), reference.getMail(), reference.getDocument(), reference.getType(), reference.getPhones());
+        return new CustomerDto(reference.getName(), reference.getMail(), reference.getDocument(), reference.getType(), reference.getPhones(), CryptUtils.encrypt(reference.getPassword()));
     }
 
     public Customer updateByDTO(Customer reference, CustomerDto dto) {
