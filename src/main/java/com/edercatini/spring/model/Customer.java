@@ -1,21 +1,21 @@
 package com.edercatini.spring.model;
 
 import com.edercatini.spring.dto.CustomerDto;
+import com.edercatini.spring.enums.CustomerRoles;
 import com.edercatini.spring.enums.CustomerTypes;
 import com.edercatini.spring.utils.CryptUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toSet;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
@@ -42,6 +42,10 @@ public class Customer extends AbstractEntity implements Serializable {
     @OneToMany(mappedBy = "customer")
     private List<Purchase> purchases = new ArrayList<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "ROLES")
+    private Set<Long> roles = new HashSet<>();
+
     public Customer() {
     }
 
@@ -51,6 +55,19 @@ public class Customer extends AbstractEntity implements Serializable {
         this.document = document;
         this.type = type.getId();
         this.password = password;
+
+        this.addRole(CustomerRoles.CUSTOMER);
+    }
+
+    public Set<CustomerRoles> getRoles() {
+        return this.roles
+                .stream()
+                .map(CustomerRoles::toEnum)
+                .collect(toSet());
+    }
+
+    public void addRole(CustomerRoles role) {
+        this.roles.add(role.getCode());
     }
 
     @Override

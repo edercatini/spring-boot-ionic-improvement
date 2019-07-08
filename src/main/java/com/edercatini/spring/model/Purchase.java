@@ -2,6 +2,7 @@ package com.edercatini.spring.model;
 
 import com.edercatini.spring.dto.PurchaseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ public class Purchase extends AbstractEntity {
     @JoinColumn(name = "delivery_address_id")
     private Address deliveryAddress;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
