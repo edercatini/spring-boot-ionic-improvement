@@ -1,6 +1,7 @@
 package com.edercatini.spring.model;
 
 import com.edercatini.spring.dto.AddressDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ public class Address extends AbstractEntity implements Serializable {
     private String neighborhood;
     private String postalCode;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;

@@ -1,5 +1,6 @@
 package com.edercatini.spring.service;
 
+import com.edercatini.spring.enums.CustomerRoles;
 import com.edercatini.spring.model.*;
 import com.edercatini.spring.repository.*;
 import com.edercatini.spring.utils.CryptUtils;
@@ -106,16 +107,51 @@ public class DatabaseService {
         stateRepository.saveAll(asList(est1, est2));
         cityRepository.saveAll(asList(c1, c2, c3));
 
-        Customer cli1 = new Customer("Maria Silva", "maria@gmail.com", "36378912377", PHYSICAL_PERSON, CryptUtils.encrypt("test"));
+        Customer cli1 = new Customer("Maria Silva",
+                "maria@gmail.com",
+                "36378912377",
+                PHYSICAL_PERSON,
+                CryptUtils.encrypt("test"));
 
         cli1.getPhones().addAll(asList("27363323", "93838393"));
 
-        Address e1 = new Address("Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
-        Address e2 = new Address("Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+        Customer cli2 = new Customer("Ana Justo",
+                "ana.justo@gmail.com",
+                "32315457068",
+                PHYSICAL_PERSON,
+                CryptUtils.encrypt("test"));
+
+        cli1.getPhones().addAll(asList("6165165165", "7474771716"));
+        cli2.addRole(CustomerRoles.ADMIN);
+
+        Address e1 = new Address("Rua Flores",
+                "300",
+                "Apto 303",
+                "Jardim",
+                "38220834",
+                cli1,
+                c1);
+
+        Address e2 = new Address("Avenida Matos",
+                "105",
+                "Sala 800",
+                "Centro",
+                "38777012",
+                cli1,
+                c2);
+
+        Address e3 = new Address("Avenida Floriano",
+                "2016",
+                "",
+                "Centro",
+                "13800000",
+                cli2,
+                c2);
 
         cli1.getAddresses().addAll(asList(e1, e2));
+        cli2.getAddresses().addAll(asList(e3));
 
-        customerRepository.saveAll(asList(cli1));
+        customerRepository.saveAll(asList(cli1, cli2));
         addressRepository.saveAll(asList(e1, e2));
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
