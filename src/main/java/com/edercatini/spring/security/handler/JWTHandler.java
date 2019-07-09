@@ -1,4 +1,4 @@
-package com.edercatini.spring.security;
+package com.edercatini.spring.security.handler;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +11,7 @@ import java.util.Date;
 import static java.util.Objects.isNull;
 
 @Component
-public class JWTUtils {
+public class JWTHandler {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -29,17 +29,7 @@ public class JWTUtils {
 
     public boolean isValidToken(String token) {
         Claims claims = this.getClaims(token);
-
-        if (!isNull(claims)) {
-            String username = claims.getSubject();
-            Date expirationDate = claims.getExpiration();
-
-            if (!isNull(username) && this.isTokenExpired(expirationDate)) {
-                return true;
-            }
-        }
-
-        return false;
+        return !isNull(claims) && !isNull(claims.getSubject()) && this.isTokenExpired(claims.getExpiration());
     }
 
     public String getUsername(String token) {

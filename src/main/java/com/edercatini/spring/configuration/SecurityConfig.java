@@ -1,8 +1,9 @@
 package com.edercatini.spring.configuration;
 
-import com.edercatini.spring.security.JWTAuthenticationFilter;
-import com.edercatini.spring.security.JWTAuthorizationFilter;
-import com.edercatini.spring.security.JWTUtils;
+import com.edercatini.spring.security.filter.JWTAuthenticationFilter;
+import com.edercatini.spring.security.filter.JWTAuthorizationFilter;
+import com.edercatini.spring.security.handler.authentication.AuthenticationHandler;
+import com.edercatini.spring.security.handler.authorization.AuthorizationHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private Environment environment;
     private UserDetailsService userDetailsService;
-    private JWTUtils jwtUtils;
+    private AuthenticationHandler authenticationHandler;
+    private AuthorizationHandler authorizationHandler;
 
     private static final String[] SWAGGER_MATCHERS = {
             "/swagger-ui.html**",
@@ -47,10 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     @Autowired
-    public SecurityConfig(Environment environment, UserDetailsService userDetailsService, JWTUtils jwtUtils) {
+    public SecurityConfig(
+            Environment environment,
+            UserDetailsService userDetailsService,
+            AuthenticationHandler authenticationHandler,
+            AuthorizationHandler authorizationHandler)
+    {
         this.environment = environment;
         this.userDetailsService = userDetailsService;
-        this.jwtUtils = jwtUtils;
+        this.authenticationHandler = authenticationHandler;
+        this.authorizationHandler = authorizationHandler;
     }
 
     @Override
@@ -59,8 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.headers().frameOptions().disable();
         }
 
-        http.addFilter(new JWTAuthenticationFilter(this.jwtUtils, authenticationManager()));
-        http.addFilter(new JWTAuthorizationFilter(this.jwtUtils, authenticationManager(), userDetailsService));
+        http.addFilter(new JWTAuthenticationFilter(this.authenticationHandler, authenticationManager()));
+        http.addFilter(new JWTAuthorizationFilter(this.authorizationHandler, authenticationManager()));
 
         http.cors()
                 .and()

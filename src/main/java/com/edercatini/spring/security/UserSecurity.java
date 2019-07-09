@@ -1,13 +1,11 @@
 package com.edercatini.spring.security;
 
-import com.edercatini.spring.enums.CustomerRoles;
 import com.edercatini.spring.model.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
@@ -21,7 +19,6 @@ public class UserSecurity implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserSecurity() {
-
     }
 
     public UserSecurity(Customer customer) {

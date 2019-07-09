@@ -1,12 +1,12 @@
-package com.edercatini.spring.security;
+package com.edercatini.spring.security.handler.authorization;
 
-import com.edercatini.spring.utils.AuthorizationUtils;
-import org.springframework.security.authentication.AuthenticationManager;
+import com.edercatini.spring.security.handler.JWTHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,20 +16,22 @@ import java.io.IOException;
 
 import static java.util.Objects.isNull;
 
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+@Component
+public class AuthorizationHandler {
 
-    private JWTUtils jwtUtils;
-    private UserDetailsService userDetailsService;
+    private static final String AUTHORIZATION = "Authorization";
 
-    public JWTAuthorizationFilter(JWTUtils jwtUtils, AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
-        super(authenticationManager);
-        this.jwtUtils = jwtUtils;
+    private final JWTHandler jwtHandler;
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    public AuthorizationHandler(JWTHandler jwtHandler, UserDetailsService userDetailsService) {
+        this.jwtHandler = jwtHandler;
         this.userDetailsService = userDetailsService;
     }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String authorizationHeader = request.getHeader("Authorization");
+    public void authorize(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
 
         if (AuthorizationUtils.isValidBearerPrefix(authorizationHeader)) {
             UsernamePasswordAuthenticationToken auth = this.getAuthentication(AuthorizationUtils.getBearerToken(authorizationHeader));
@@ -43,8 +45,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        if (jwtUtils.isValidToken(token)) {
-            UserDetails user = userDetailsService.loadUserByUsername(jwtUtils.getUsername(token));
+        if (jwtHandler.isValidToken(token)) {
+            UserDetails user = userDetailsService.loadUserByUsername(jwtHandler.getUsername(token));
             return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         }
 
