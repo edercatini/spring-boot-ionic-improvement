@@ -3,7 +3,7 @@ package com.edercatini.spring.service;
 import com.edercatini.spring.enums.CustomerRoles;
 import com.edercatini.spring.model.*;
 import com.edercatini.spring.repository.*;
-import com.edercatini.spring.utils.CryptUtils;
+import com.edercatini.spring.util.CryptUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

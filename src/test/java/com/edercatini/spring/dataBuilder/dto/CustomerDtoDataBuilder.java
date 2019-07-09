@@ -2,7 +2,7 @@ package com.edercatini.spring.dataBuilder.dto;
 
 import com.edercatini.spring.dto.CustomerDto;
 import com.edercatini.spring.enums.CustomerTypes;
-import com.edercatini.spring.utils.CryptUtils;
+import com.edercatini.spring.util.CryptUtils;
 
 import java.util.HashSet;
 import java.util.Set;

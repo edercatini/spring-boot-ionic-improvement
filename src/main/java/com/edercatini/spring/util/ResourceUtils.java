@@ -1,11 +1,10 @@
-package com.edercatini.spring.utils;
+package com.edercatini.spring.util;
 
 import com.edercatini.spring.model.CustomResponse;
 import com.edercatini.spring.model.Entity;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.List;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 

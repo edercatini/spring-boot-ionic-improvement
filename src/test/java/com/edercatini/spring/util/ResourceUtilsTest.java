@@ -1,22 +1,18 @@
-package com.edercatini.spring.utils;
+package com.edercatini.spring.util;
 
+import com.edercatini.spring.ComponentTest;
 import com.edercatini.spring.model.Category;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 
 import static com.edercatini.spring.dataBuilder.domain.CategoryDataBuilder.anObject;
-import static com.edercatini.spring.utils.ResourceUtils.createUri;
-import static com.edercatini.spring.utils.ResourceUtils.setResponse;
+import static com.edercatini.spring.util.ResourceUtils.createUri;
+import static com.edercatini.spring.util.ResourceUtils.setResponse;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ResourceUtilsTest {
+public class ResourceUtilsTest extends ComponentTest {
 
     private static final Long ID = 1L;
     private static final String URI_TO_COMPARE = "/category/" + ID;

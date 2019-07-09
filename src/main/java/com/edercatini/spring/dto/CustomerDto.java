@@ -1,7 +1,7 @@
 package com.edercatini.spring.dto;
 
 import com.edercatini.spring.model.Customer;
-import com.edercatini.spring.utils.CryptUtils;
+import com.edercatini.spring.util.CryptUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

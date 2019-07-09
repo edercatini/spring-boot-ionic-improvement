@@ -1,12 +1,13 @@
-package com.edercatini.spring.utils;
+package com.edercatini.spring.security.handler.authorization;
 
+import com.edercatini.spring.ComponentTest;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class AuthorizationUtilsTest extends UtilsTest {
+public class AuthorizationUtilsTest extends ComponentTest {
 
     private static final String VALID_TOKEN = "Bearer Token";
     private static final String INVALID_TOKEN = "Invalid Token";

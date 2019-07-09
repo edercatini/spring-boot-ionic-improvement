@@ -1,4 +1,4 @@
-package com.edercatini.spring.utils;
+package com.edercatini.spring.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

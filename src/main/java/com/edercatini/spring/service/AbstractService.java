@@ -12,8 +12,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.edercatini.spring.utils.ResourceUtils.createUri;
-import static com.edercatini.spring.utils.ResourceUtils.setResponse;
+import static com.edercatini.spring.util.ResourceUtils.createUri;
+import static com.edercatini.spring.util.ResourceUtils.setResponse;
 import static java.util.Arrays.asList;
 
 public abstract class AbstractService<T> {

@@ -2,7 +2,7 @@ package com.edercatini.spring.dataBuilder.domain;
 
 import com.edercatini.spring.enums.CustomerTypes;
 import com.edercatini.spring.model.Customer;
-import com.edercatini.spring.utils.CryptUtils;
+import com.edercatini.spring.util.CryptUtils;
 
 import static com.edercatini.spring.enums.CustomerTypes.toEnum;
 
