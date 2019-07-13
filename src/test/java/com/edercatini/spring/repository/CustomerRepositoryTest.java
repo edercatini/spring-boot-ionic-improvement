@@ -1,14 +1,11 @@
 package com.edercatini.spring.repository;
 
-import com.edercatini.spring.model.Customer;
 import com.edercatini.spring.enums.CustomerType;
+import com.edercatini.spring.model.Customer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,11 +16,9 @@ import static com.edercatini.spring.dataBuilder.domain.CustomerDataBuilder.anObj
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class CustomerRepositoryTest {
+public class CustomerRepositoryTest extends RepositoryTest {
 
     private static final String OBJECT_NAME = "Customer";
     private static final String OBJECT_MAIL = "Mail";
@@ -78,5 +73,17 @@ public class CustomerRepositoryTest {
         repository.deleteAll();
         List<Customer> objects = repository.findAll();
         assertThat(objects.size(), is(equalTo(0)));
+    }
+
+    @Test
+    public void mustFindByMail() {
+        String mail = "mail@mail.com";
+        repository.save(anObject().withMail(mail).build());
+        assertTrue(repository.findByMail(mail).isPresent());
+    }
+
+    @Test
+    public void mustNotFindByMail() {
+        assertFalse(repository.findByMail("invalid@invalid.com").isPresent());
     }
 }

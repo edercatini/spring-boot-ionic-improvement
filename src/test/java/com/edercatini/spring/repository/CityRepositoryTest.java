@@ -4,10 +4,7 @@ import com.edercatini.spring.model.City;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +15,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class CityRepositoryTest {
+public class CityRepositoryTest extends RepositoryTest {
 
     private static final String OBJECT_NAME = "City";
     private static final Long INVALID_PARAM_ID = 9999999999999L;
