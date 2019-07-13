@@ -1,6 +1,5 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.enums.CustomerRoles;
 import com.edercatini.spring.repository.CustomerRepository;
 import com.edercatini.spring.security.UserSecurity;
 import org.junit.After;

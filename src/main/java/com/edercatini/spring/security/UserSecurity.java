@@ -1,5 +1,6 @@
 package com.edercatini.spring.security;
 
+import com.edercatini.spring.enums.Role;
 import com.edercatini.spring.model.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,7 +32,7 @@ public class UserSecurity implements UserDetails {
                 .collect(toList());
     }
 
-    private Long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -68,5 +69,9 @@ public class UserSecurity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean hasRole(Role role) {
+        return getAuthorities().contains(new SimpleGrantedAuthority(role.getDescription()));
     }
 }

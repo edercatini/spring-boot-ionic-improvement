@@ -1,6 +1,6 @@
 package com.edercatini.spring.service;
 
-import com.edercatini.spring.enums.CustomerRoles;
+import com.edercatini.spring.enums.Role;
 import com.edercatini.spring.model.*;
 import com.edercatini.spring.repository.*;
 import com.edercatini.spring.util.CryptUtils;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static com.edercatini.spring.enums.CustomerTypes.PHYSICAL_PERSON;
+import static com.edercatini.spring.enums.CustomerType.PHYSICAL_PERSON;
 import static com.edercatini.spring.enums.PaymentStatus.PAID;
 import static com.edercatini.spring.enums.PaymentStatus.PENDING;
 import static java.util.Arrays.asList;
@@ -122,7 +122,7 @@ public class DatabaseService {
                 CryptUtils.encrypt("test"));
 
         cli1.getPhones().addAll(asList("6165165165", "7474771716"));
-        cli2.addRole(CustomerRoles.ADMIN);
+        cli2.addRole(Role.ADMIN);
 
         Address e1 = new Address("Rua Flores",
                 "300",

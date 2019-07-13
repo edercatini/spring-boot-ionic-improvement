@@ -32,4 +32,10 @@ public class ResourceExceptionHandler {
         StandardError err = new StandardError(METHOD_NOT_ALLOWED.value(), "URI inválida.", currentTimeMillis());
         return status(METHOD_NOT_ALLOWED).body(err);
     }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> forbidden(ObjectNotFoundException e, HttpServletRequest request) {
+        StandardError err = new StandardError(FORBIDDEN.value(), e.getMessage(), currentTimeMillis());
+        return status(FORBIDDEN).body(err);
+    }
 }

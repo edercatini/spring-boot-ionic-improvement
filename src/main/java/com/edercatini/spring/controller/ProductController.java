@@ -8,6 +8,7 @@ import com.edercatini.spring.service.ProductService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -54,6 +55,7 @@ public class ProductController {
     @ApiOperation(value = "Persist a Product Entity")
     @PostMapping
     @ResponseStatus(CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse save(@Valid @RequestBody ProductDto dto) {
         Product entity = new Product();
         return service.save(entity.updateByDTO(entity, dto));
@@ -62,6 +64,7 @@ public class ProductController {
     @ApiOperation(value = "Updates an existing Product Entity")
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void update(@PathVariable Long id, @Valid @RequestBody ProductDto dto) {
         CustomResponse<Product> object = findById(id);
         Product reference = object.getEntity();
@@ -71,6 +74,7 @@ public class ProductController {
     @ApiOperation(value = "Deletes a specific Product Entity")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

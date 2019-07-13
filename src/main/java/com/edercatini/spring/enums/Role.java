@@ -2,7 +2,7 @@ package com.edercatini.spring.enums;
 
 import java.io.Serializable;
 
-public enum CustomerRoles implements Serializable {
+public enum Role implements Serializable {
 
     ADMIN(1L, "ROLE_ADMIN"),
     CUSTOMER(2L, "ROLE_CUSTOMER");
@@ -12,7 +12,7 @@ public enum CustomerRoles implements Serializable {
     private Long code;
     private String description;
 
-    private CustomerRoles(Long code, String description) {
+    private Role(Long code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -25,12 +25,12 @@ public enum CustomerRoles implements Serializable {
         return description;
     }
 
-    public static CustomerRoles toEnum(Long id) {
+    public static Role toEnum(Long id) {
         if (id == null) {
             return null;
         }
 
-        for (CustomerRoles type : CustomerRoles.values()) {
+        for (Role type : Role.values()) {
             if (type.getCode().equals(id)) {
                 return type;
             }

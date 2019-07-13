@@ -8,6 +8,7 @@ import com.edercatini.spring.service.CategoryService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -51,6 +52,7 @@ public class CategoryController {
         return service.findByPage(page, size, direction, properties);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @ApiOperation(value = "Persist a Category Entity")
     @PostMapping
     @ResponseStatus(CREATED)
@@ -59,6 +61,7 @@ public class CategoryController {
         return service.save(entity.updateByDTO(entity, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @ApiOperation(value = "Updates an existing Category Entity")
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
@@ -68,6 +71,7 @@ public class CategoryController {
         service.update(reference.updateByDTO(reference, dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @ApiOperation(value = "Deletes a specific Category Entity")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)

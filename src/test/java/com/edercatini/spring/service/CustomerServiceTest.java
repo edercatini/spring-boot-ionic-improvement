@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -29,7 +30,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@Profile("test")
 public class CustomerServiceTest extends ServiceTest {
 
     private static final String OBJECT_NAME = "Customer";
@@ -44,6 +44,9 @@ public class CustomerServiceTest extends ServiceTest {
 
     @MockBean
     private CustomerRepository repository;
+
+    @MockBean
+    private UserService userService;
 
     @Autowired
     private CustomerService service;

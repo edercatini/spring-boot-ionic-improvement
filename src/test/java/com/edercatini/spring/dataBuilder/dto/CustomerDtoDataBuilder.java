@@ -1,20 +1,20 @@
 package com.edercatini.spring.dataBuilder.dto;
 
 import com.edercatini.spring.dto.CustomerDto;
-import com.edercatini.spring.enums.CustomerTypes;
+import com.edercatini.spring.enums.CustomerType;
 import com.edercatini.spring.util.CryptUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.edercatini.spring.enums.CustomerTypes.toEnum;
+import static com.edercatini.spring.enums.CustomerType.toEnum;
 
 public class CustomerDtoDataBuilder {
 
     private static final String OBJECT_NAME = "Customer";
     private static final String OBJECT_MAIL = "test@test.com";
     private static final String OBJECT_DOCUMENT = "9999999999";
-    private static final Long OBJECT_TYPE = CustomerTypes.PHYSICAL_PERSON.getId();
+    private static final Long OBJECT_TYPE = CustomerType.PHYSICAL_PERSON.getId();
     private static final String OBJECT_PASSWORD = "test";
     private static final Set<String> PHONES = new HashSet<>();
 
@@ -44,7 +44,7 @@ public class CustomerDtoDataBuilder {
         return this;
     }
 
-    public CustomerDtoDataBuilder withType(CustomerTypes type) {
+    public CustomerDtoDataBuilder withType(CustomerType type) {
         entity.setType(toEnum(type.getId()).getId());
         return this;
     }

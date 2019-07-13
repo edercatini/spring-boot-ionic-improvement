@@ -8,6 +8,7 @@ import com.edercatini.spring.service.PurchaseService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class PurchaseController {
     @ApiOperation(value = "Searches for a specific Purchase by its ID")
     @GetMapping("/{id}")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse findById(@PathVariable Long id) {
         return service.findById(id);
     }
@@ -36,6 +38,7 @@ public class PurchaseController {
     @ApiOperation(value = "Returns a complete set of Purchases")
     @GetMapping
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public MultipleCustomResponse findAll() {
         return service.findAll();
     }
@@ -43,6 +46,7 @@ public class PurchaseController {
     @ApiOperation(value = "Returns a complete set of Purchases with paginated data")
     @GetMapping(value = "/page")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public Page<Purchase> findByPage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "24") Integer size,
@@ -54,6 +58,7 @@ public class PurchaseController {
     @ApiOperation(value = "Persist a Purchase Entity")
     @PostMapping
     @ResponseStatus(CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse save(@Valid @RequestBody PurchaseDto dto) {
         Purchase entity = new Purchase();
         return service.save(entity.updateByDTO(entity, dto));
@@ -62,6 +67,7 @@ public class PurchaseController {
     @ApiOperation(value = "Updates an existing Purchase Entity")
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void update(@PathVariable Long id, @Valid @RequestBody PurchaseDto dto) {
         CustomResponse<Purchase> object = findById(id);
         Purchase reference = object.getEntity();
@@ -71,6 +77,7 @@ public class PurchaseController {
     @ApiOperation(value = "Deletes a specific Purchase Entity")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

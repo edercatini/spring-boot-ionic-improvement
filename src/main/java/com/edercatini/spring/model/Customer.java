@@ -1,8 +1,8 @@
 package com.edercatini.spring.model;
 
 import com.edercatini.spring.dto.CustomerDto;
-import com.edercatini.spring.enums.CustomerRoles;
-import com.edercatini.spring.enums.CustomerTypes;
+import com.edercatini.spring.enums.Role;
+import com.edercatini.spring.enums.CustomerType;
 import com.edercatini.spring.util.CryptUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -49,24 +49,24 @@ public class Customer extends AbstractEntity implements Serializable {
     public Customer() {
     }
 
-    public Customer(String name, String mail, String document, CustomerTypes type, String password) {
+    public Customer(String name, String mail, String document, CustomerType type, String password) {
         this.name = name;
         this.mail = mail;
         this.document = document;
         this.type = type.getId();
         this.password = password;
 
-        this.addRole(CustomerRoles.CUSTOMER);
+        this.addRole(Role.CUSTOMER);
     }
 
-    public Set<CustomerRoles> getRoles() {
+    public Set<Role> getRoles() {
         return this.roles
                 .stream()
-                .map(CustomerRoles::toEnum)
+                .map(Role::toEnum)
                 .collect(toSet());
     }
 
-    public void addRole(CustomerRoles role) {
+    public void addRole(Role role) {
         this.roles.add(role.getCode());
     }
 
