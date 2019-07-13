@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.edercatini.spring.enums.CustomerTypes.toEnum;
+import static com.edercatini.spring.enums.CustomerType.toEnum;
 
 @Data
 @AllArgsConstructor

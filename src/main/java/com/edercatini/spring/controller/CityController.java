@@ -8,6 +8,7 @@ import com.edercatini.spring.service.CityService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class CityController {
     @ApiOperation(value = "Searches for a specific City by its ID")
     @GetMapping("/{id}")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse findById(@PathVariable Long id) {
         return service.findById(id);
     }
@@ -36,6 +38,7 @@ public class CityController {
     @ApiOperation(value = "Returns a complete set of Cities")
     @GetMapping
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public MultipleCustomResponse findAll() {
         return service.findAll();
     }
@@ -43,6 +46,7 @@ public class CityController {
     @ApiOperation(value = "Returns a complete set of Cities with paginated data")
     @GetMapping(value = "/page")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public Page<City> findByPage(
         @RequestParam(value = "page", defaultValue = "0") Integer page,
         @RequestParam(value = "size", defaultValue = "24") Integer size,
@@ -54,6 +58,7 @@ public class CityController {
     @ApiOperation(value = "Persist a City Entity")
     @PostMapping
     @ResponseStatus(CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse save(@Valid @RequestBody CityDto dto) {
         City entity = new City();
         return service.save(entity.updateByDTO(entity, dto));
@@ -62,6 +67,7 @@ public class CityController {
     @ApiOperation(value = "Updates an existing City Entity")
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void update(@PathVariable Long id, @Valid @RequestBody CityDto dto) {
         CustomResponse<City> object = findById(id);
         City reference = object.getEntity();
@@ -71,6 +77,7 @@ public class CityController {
     @ApiOperation(value = "Deletes a specific City Entity")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

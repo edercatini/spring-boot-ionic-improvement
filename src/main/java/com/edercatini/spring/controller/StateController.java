@@ -8,6 +8,7 @@ import com.edercatini.spring.service.StateService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class StateController {
     @ApiOperation(value = "Searches for a specific State by its ID")
     @GetMapping("/{id}")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse findById(@PathVariable Long id) {
         return service.findById(id);
     }
@@ -36,6 +38,7 @@ public class StateController {
     @ApiOperation(value = "Returns a complete set of States")
     @GetMapping
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public MultipleCustomResponse findAll() {
         return service.findAll();
     }
@@ -43,6 +46,7 @@ public class StateController {
     @ApiOperation(value = "Returns a complete set of States with paginated data")
     @GetMapping(value = "/page")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public Page<State> findByPage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "24") Integer size,
@@ -54,6 +58,7 @@ public class StateController {
     @ApiOperation(value = "Persist a State Entity")
     @PostMapping
     @ResponseStatus(CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse save(@Valid @RequestBody StateDto dto) {
         State entity = new State();
         return service.save(entity.updateByDTO(entity, dto));
@@ -62,6 +67,7 @@ public class StateController {
     @ApiOperation(value = "Updates an existing State Entity")
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void update(@PathVariable Long id, @Valid @RequestBody StateDto dto) {
         CustomResponse<State> object = findById(id);
         State reference = object.getEntity();
@@ -71,6 +77,7 @@ public class StateController {
     @ApiOperation(value = "Deletes a specific State Entity")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

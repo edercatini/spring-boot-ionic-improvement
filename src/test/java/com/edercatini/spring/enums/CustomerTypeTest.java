@@ -5,14 +5,14 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.edercatini.spring.enums.CustomerTypes.*;
+import static com.edercatini.spring.enums.CustomerType.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CustomerTypesTest {
+public class CustomerTypeTest {
 
     private static final Long LEGAL_PERSON_ID = 1L;
     private static final Long PHYSICAL_PERSON_ID = 2L;

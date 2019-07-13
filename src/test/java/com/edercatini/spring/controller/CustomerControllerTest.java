@@ -1,21 +1,16 @@
 package com.edercatini.spring.controller;
 
-import com.edercatini.spring.model.CustomResponse;
-import com.edercatini.spring.model.Customer;
-import com.edercatini.spring.model.MultipleCustomResponse;
 import com.edercatini.spring.service.CustomerService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.edercatini.spring.dataBuilder.domain.CustomerDataBuilder.anObject;
-import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,39 +29,50 @@ public class CustomerControllerTest extends ControllerTest {
     private CustomerService service;
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void mustFindById() throws Exception {
-        CustomResponse<Customer> response = new CustomResponse<>();
-        response.setEntity(anObject().build());
-        given(service.findById(anyLong())).willReturn(response);
+        given(service.findById(anyLong())).willReturn(mockResponse(anObject().build()));
 
-        super.mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + ENDPOINT_ID_PARAM)
+        mvc.perform(get(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.entity.name").value(OBJECT_NAME));
     }
 
     @Test
+    @WithMockUser(roles = {"CUSTOMER"})
+    public void mustDenyGetByIdForNonAdminUsers() throws Exception {
+        mvc.perform(get(API_BASE_URL + ENDPOINT_ID_PARAM)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void mustFindAll() throws Exception {
-        CustomResponse<Customer> customResponse = new CustomResponse<>();
-        customResponse.setEntity(anObject().build());
+        given(service.findAll()).willReturn(mockMultipleResponse(anObject().build()));
 
-        MultipleCustomResponse response = new MultipleCustomResponse();
-        response.setEntities(asList(customResponse));
-
-        given(service.findAll()).willReturn(response);
-
-        super.mvc.perform(MockMvcRequestBuilders.get(API_BASE_URL)
+        mvc.perform(get(API_BASE_URL)
             .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.entities[0].entity.name").value(OBJECT_NAME));
     }
 
     @Test
+    @WithMockUser(roles = {"CUSTOMER"})
+    public void mustDenyGetAllForNonAdminUsers() throws Exception {
+        mvc.perform(get(API_BASE_URL)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void mustFindByPage() throws Exception {
         given(service.findByPage(anyInt(), anyInt(), anyString(), anyString()))
-            .willReturn(new PageImpl<>(asList(anObject().build(), anObject().build())));
+            .willReturn(mockPageRequest(anObject().build()));
 
-        super.mvc.perform(MockMvcRequestBuilders.get(API_PAGE_URL)
+        mvc.perform(get(API_PAGE_URL)
             .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content[0].name").value(OBJECT_NAME))
@@ -76,50 +82,68 @@ public class CustomerControllerTest extends ControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"CUSTOMER"})
+    public void mustDenyGetByPageForNonAdminUsers() throws Exception {
+        mvc.perform(get(API_PAGE_URL)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void mustReturnHttp404IfEndpointDoesNotExist() throws Exception {
-        super.mvc.perform(MockMvcRequestBuilders.get(INVALID_ENDPOINT)
+        mvc.perform(get(INVALID_ENDPOINT)
             .accept(APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
 
     @Test
     public void mustSaveAnObject() throws Exception {
-        Customer object = anObject().build();
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(object);
-
-        super.mvc.perform(MockMvcRequestBuilders.post(API_BASE_URL)
-            .content(json)
+        mvc.perform(post(API_BASE_URL)
+            .content(mockObjectAsJson(anObject().build()))
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON))
             .andExpect(status().isCreated());
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void mustUpdateAnObject() throws Exception {
-        Customer object = anObject().build();
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(object);
-
-        CustomResponse response = new CustomResponse();
-        response.setEntity(anObject().build());
-
-        given(service.findById(anyLong())).willReturn(response);
+        given(service.findById(anyLong())).willReturn(mockResponse(anObject().build()));
         doNothing().when(service).update(any());
 
-        super.mvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + ENDPOINT_ID_PARAM)
-            .content(json)
+        mvc.perform(put(API_BASE_URL + ENDPOINT_ID_PARAM)
+            .content(mockObjectAsJson(anObject().build()))
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON))
             .andExpect(status().isNoContent());
     }
 
     @Test
+    @WithMockUser(roles = {"CUSTOMER"})
+    public void mustDenyPutOperationForNonAdminUsers() throws Exception {
+        mvc.perform(put(API_BASE_URL + ENDPOINT_ID_PARAM)
+                .content(mockObjectAsJson(anObject().build()))
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void mustDeleteAnObject() throws Exception {
         doNothing().when(service).delete(anyLong());
 
-        super.mvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + ENDPOINT_ID_PARAM)
+        mvc.perform(delete(API_BASE_URL + ENDPOINT_ID_PARAM)
             .accept(APPLICATION_JSON))
             .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = {"CUSTOMER"})
+    public void mustDenyDeleteOperationForNonAdminUsers() throws Exception {
+        mvc.perform(delete(API_BASE_URL + ENDPOINT_ID_PARAM)
+                .accept(APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 }

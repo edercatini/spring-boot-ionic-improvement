@@ -1,10 +1,11 @@
 package com.edercatini.spring.dataBuilder.domain;
 
-import com.edercatini.spring.enums.CustomerTypes;
+import com.edercatini.spring.enums.Role;
+import com.edercatini.spring.enums.CustomerType;
 import com.edercatini.spring.model.Customer;
 import com.edercatini.spring.util.CryptUtils;
 
-import static com.edercatini.spring.enums.CustomerTypes.toEnum;
+import static com.edercatini.spring.enums.CustomerType.toEnum;
 
 public class CustomerDataBuilder {
 
@@ -12,7 +13,7 @@ public class CustomerDataBuilder {
     private static final String OBJECT_MAIL = "test@test.com";
     private static final String OBJECT_DOCUMENT = "9999999999";
     private static final String OBJECT_PASSWORD = "test";
-    private static final CustomerTypes OBJECT_TYPE = CustomerTypes.PHYSICAL_PERSON;
+    private static final CustomerType OBJECT_TYPE = CustomerType.PHYSICAL_PERSON;
 
     private Customer entity;
 
@@ -22,6 +23,7 @@ public class CustomerDataBuilder {
     public static CustomerDataBuilder anObject() {
         CustomerDataBuilder builder = new CustomerDataBuilder();
         builder.entity = new Customer(OBJECT_NAME, OBJECT_MAIL, OBJECT_DOCUMENT, OBJECT_TYPE, CryptUtils.encrypt(OBJECT_PASSWORD));
+        builder.entity.addRole(Role.ADMIN);
         return builder;
     }
 
@@ -40,8 +42,13 @@ public class CustomerDataBuilder {
         return this;
     }
 
-    public CustomerDataBuilder withType(CustomerTypes type) {
+    public CustomerDataBuilder withType(CustomerType type) {
         entity.setType(toEnum(type.getId()).getId());
+        return this;
+    }
+
+    public CustomerDataBuilder withRole(Role role) {
+        entity.addRole(role);
         return this;
     }
 

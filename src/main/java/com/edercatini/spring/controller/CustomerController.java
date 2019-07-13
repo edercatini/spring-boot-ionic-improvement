@@ -8,6 +8,7 @@ import com.edercatini.spring.service.CustomerService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class CustomerController {
     @ApiOperation(value = "Searches for a specific Customer by its ID")
     @GetMapping("/{id}")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CustomResponse findById(@PathVariable Long id) {
         return service.findById(id);
     }
@@ -36,6 +38,7 @@ public class CustomerController {
     @ApiOperation(value = "Returns a complete set of Customers")
     @GetMapping
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public MultipleCustomResponse findAll() {
         return service.findAll();
     }
@@ -43,6 +46,7 @@ public class CustomerController {
     @ApiOperation(value = "Returns a complete set of Customers with paginated data")
     @GetMapping(value = "/page")
     @ResponseStatus(OK)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public Page<Customer> findByPage(
         @RequestParam(value = "page", defaultValue = "0") Integer page,
         @RequestParam(value = "size", defaultValue = "24") Integer size,
@@ -62,6 +66,7 @@ public class CustomerController {
     @ApiOperation(value = "Updates an existing Customer Entity")
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void update(@PathVariable Long id, @Valid @RequestBody CustomerDto dto) {
         CustomResponse<Customer> object = findById(id);
         Customer reference = object.getEntity();
@@ -71,6 +76,7 @@ public class CustomerController {
     @ApiOperation(value = "Deletes a specific Customer Entity")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

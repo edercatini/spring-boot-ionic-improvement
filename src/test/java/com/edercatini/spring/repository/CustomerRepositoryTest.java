@@ -1,7 +1,7 @@
 package com.edercatini.spring.repository;
 
 import com.edercatini.spring.model.Customer;
-import com.edercatini.spring.enums.CustomerTypes;
+import com.edercatini.spring.enums.CustomerType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class CustomerRepositoryTest {
     private static final String OBJECT_NAME = "Customer";
     private static final String OBJECT_MAIL = "Mail";
     private static final String OBJECT_DOCUMENT = "9999999999";
-    private static final CustomerTypes OBJECT_TYPE = CustomerTypes.PHYSICAL_PERSON;
+    private static final CustomerType OBJECT_TYPE = CustomerType.PHYSICAL_PERSON;
     private static final Set<String> PHONES = new HashSet<>();
     private static final Long INVALID_PARAM_ID = 9999999999999L;
 
